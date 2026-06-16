@@ -1,0 +1,15 @@
+{% extends 'my_app/base.html' %}
+{% load static %}
+{% block title %}Login - My App{% endblock %}
+
+{% block content %}
+    <div class="login-container">
+        <form action="{% url 'users:login' %}" method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <input type="email" name="username" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+{% endblock %}

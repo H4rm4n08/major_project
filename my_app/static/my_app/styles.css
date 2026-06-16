@@ -1,0 +1,138 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Mobile Container Frame */
+.phone-container {
+    width: 100%;
+    max-width: 380px;
+    height: 780px;
+    background: #ffffff;
+    border: 4px solid #1e295d;
+    border-radius: 40px;
+    padding: 30px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.1);
+}
+
+/* Top Speaker Notch Accent */
+.phone-container::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    width: 120px;
+    height: 5px;
+    background-color: #1e295d;
+    border-radius: 10px;
+}
+
+/* Title Header */
+.header-title {
+    color: #ff2a2a;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+    line-height: 1.2;
+}
+
+/* Image Container */
+.logo-container {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.app-logo {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+}
+
+.signup-redirect {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.signup-redirect a {
+    color: #b5835a;
+    text-decoration: underline;
+}
+
+/* Form Styles */
+.auth-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: #8c6239;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.input-group input {
+    width: 100%;
+    height: 45px;
+    background-color: #e9e9e9;
+    border: none;
+    border-radius: 8px;
+    padding: 0 15px;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+}
+
+/* Action Button */
+.submit-btn {
+    width: 100%;
+    height: 50px;
+    background-color: #ff3333;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background 0.2s;
+}
+
+.submit-btn:hover {
+    background-color: #e02d2d;
+}
+
+/* Bottom iOS-style home line */
+.home-bar {
+    position: absolute;
+    bottom: 12px;
+    width: 140px;
+    height: 4px;
+    background-color: #1e295d;
+    border-radius: 10px;
+}

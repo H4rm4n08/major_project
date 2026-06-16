@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Squad</title>
+    <link rel="stylesheet" href="{% static 'my_app/styles.css' %}">
+</head>
+<body>
+    <div class="phone-container">
+        <h1 class="header-title">Welcome, {{ request.user.first_name }}!</h1>
+
+        <div class="logo-container">
+            <img src="{% static 'my_app/logo.png' %}" alt="Cricket Logo" class="app-logo">
+        </div>
+
+        <p>You're logged in. Ready to build your dream squad?</p>
+
+        <a href="/users/logout">
+            <button class="submit-btn">Logout</button>
+        </a>
+
+        <div class="home-bar"></div>
+    </div>
+</body>
+</html>

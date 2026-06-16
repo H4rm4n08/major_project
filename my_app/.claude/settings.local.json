@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(gh auth status 2>&1)",
+      "PowerShell(Get-Command git -ErrorAction SilentlyContinue; \\(Get-Command git -ErrorAction SilentlyContinue\\).Source; [System.IO.File]::Exists\\(\"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.exe\"\\))",
+      "Bash(gh auth *)",
+      "PowerShell([System.IO.File]::Exists\\(\"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\"\\); [System.IO.File]::Exists\\(\"C:\\\\Users\\\\harma\\\\AppData\\\\Local\\\\Programs\\\\GitHub CLI\\\\gh.exe\"\\))",
+      "PowerShell($env:PATH += \";C:\\\\Program Files\\\\GitHub CLI\"; gh auth status 2>&1)",
+      "PowerShell(Get-Content \"$env:APPDATA\\\\GitHub CLI\\\\hosts.yml\" 2>&1)"
+    ]
+  }
+}
