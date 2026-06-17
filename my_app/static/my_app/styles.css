@@ -8,10 +8,75 @@
 body {
     background-color: #f5f5f5;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     min-height: 100vh;
-    padding: 20px;
+    margin: 0;
+}
+
+/* ── Site layout ── */
+.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 24px;
+    background: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.site-logo img {
+    height: 52px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.site-username {
+    font-size: 14px;
+    color: #555;
+}
+
+.site-logout-btn {
+    background: #E07020;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 7px 18px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.site-logout-btn:hover {
+    background: #c45e10;
+}
+
+.site-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.site-messages {
+    list-style: none;
+    padding: 10px 24px;
+    background: #fff8f2;
+    border-bottom: 1px solid #f0d0b0;
+    font-size: 13px;
+    color: #7a3800;
+}
+
+.site-footer {
+    text-align: center;
+    padding: 14px;
+    font-size: 12px;
+    color: #888;
+    background: #ffffff;
+    border-top: 1px solid #e0e0e0;
 }
 
 /* Mobile Container Frame */
@@ -135,4 +200,580 @@ body {
     height: 4px;
     background-color: #1e295d;
     border-radius: 10px;
+}
+
+/* ── Auth pages (login & register) ── */
+.auth-page {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 360px;
+    background: #ffffff;
+    border-radius: 28px;
+    border: 2px solid #d0d0d0;
+    padding: 28px 24px 32px;
+    box-shadow: 0 0 0 6px #f0f0f0, 0 0 0 7px #d0d0d0;
+}
+
+.auth-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 500;
+    color: #E07020;
+    line-height: 1.3;
+    margin: 0 0 18px;
+}
+
+.auth-badge {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    border: 3px solid #E07020;
+    background: #fff8f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+}
+
+.auth-badge img,
+.auth-badge svg {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+}
+
+.auth-switch {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+.auth-switch a {
+    color: #1a6fc4;
+    text-decoration: underline;
+}
+
+.auth-errors {
+    background: #fdecea;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    list-style: none;
+    font-size: 13px;
+    color: #b91c1c;
+}
+
+.auth-label {
+    display: block;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #1a6fc4;
+    margin-bottom: 5px;
+}
+
+.auth-input {
+    width: 100%;
+    background: #e8f0fa;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: #222;
+    margin-bottom: 12px;
+    outline: none;
+}
+
+.auth-input:focus {
+    box-shadow: 0 0 0 2px #1a6fc466;
+}
+
+.auth-row {
+    display: flex;
+    gap: 10px;
+}
+
+.auth-half {
+    flex: 1;
+}
+
+.auth-field-error {
+    font-size: 12px;
+    color: #b91c1c;
+    margin: -8px 0 10px;
+}
+
+.auth-btn {
+    width: 100%;
+    background: #E07020;
+    color: #ffffff;
+    border: none;
+    border-radius: 24px;
+    padding: 13px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: background 0.2s;
+}
+
+.auth-btn:hover {
+    background: #c45e10;
+}
+/* ── Dashboard (home) ── */
+.dash-page {
+    padding: 2rem 1.5rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.dash-welcome {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.dash-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 12px;
+}
+
+.dash-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: #E07020;
+    margin: 0 0 6px;
+}
+
+.dash-subtitle {
+    font-size: 14px;
+    color: #888;
+}
+
+.dash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.dash-card {
+    background: #fff;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 16px;
+    padding: 24px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.dash-card:hover {
+    border-color: #E07020;
+    box-shadow: 0 4px 16px rgba(224,112,32,0.12);
+}
+
+.dash-card-icon { font-size: 32px; }
+
+.dash-card-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #222;
+}
+
+.dash-card-desc {
+    font-size: 12px;
+    color: #888;
+}
+
+/* ── Shared cricket pages ── */
+.cric-page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 3rem;
+}
+
+.cric-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 1.5rem;
+}
+
+.cric-back {
+    font-size: 14px;
+    color: #1a6fc4;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.cric-back:hover { text-decoration: underline; }
+
+.cric-title {
+    font-size: 22px;
+    font-weight: 500;
+    color: #222;
+    margin: 0;
+}
+
+.cric-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cric-card {
+    background: #fff;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 14px;
+    padding: 16px 18px;
+}
+
+.cric-card-link {
+    text-decoration: none;
+    display: block;
+    transition: border-color 0.2s;
+}
+
+.cric-card-link:hover { border-color: #E07020; }
+
+.cric-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.cric-series {
+    font-size: 12px;
+    color: #888;
+}
+
+.cric-match-type {
+    font-size: 11px;
+    color: #1a6fc4;
+    font-weight: 600;
+}
+
+.cric-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.cric-badge.live    { background: #fdecea; color: #b91c1c; }
+.cric-badge.ended   { background: #f0f0f0; color: #666; }
+.cric-badge.upcoming { background: #e8f0fa; color: #1a6fc4; }
+
+.cric-teams {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.cric-team {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cric-team-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #222;
+}
+
+.cric-score {
+    font-size: 14px;
+    color: #E07020;
+    font-weight: 500;
+}
+
+.cric-vs {
+    font-size: 12px;
+    color: #aaa;
+    flex-shrink: 0;
+}
+
+.cric-status {
+    font-size: 12px;
+    color: #666;
+    margin: 4px 0 0;
+}
+
+.cric-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: #888;
+    margin-top: 8px;
+}
+
+.cric-empty {
+    text-align: center;
+    color: #888;
+    padding: 3rem 0;
+    font-size: 14px;
+}
+
+/* ── Player search ── */
+.cric-search-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.cric-search-input {
+    flex: 1;
+    background: #e8f0fa;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 14px;
+    color: #222;
+    outline: none;
+}
+
+.cric-search-input:focus { box-shadow: 0 0 0 2px #1a6fc466; }
+
+.cric-search-btn {
+    background: #E07020;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.cric-search-btn:hover { background: #c45e10; }
+
+.cric-player-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cric-player-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.cric-player-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #e8f0fa;
+    color: #1a6fc4;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cric-player-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cric-player-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #222;
+}
+
+.cric-player-meta {
+    font-size: 12px;
+    color: #888;
+}
+
+.cric-chevron {
+    font-size: 20px;
+    color: #ccc;
+}
+
+/* ── Player stats profile ── */
+.player-profile { margin-bottom: 1.5rem; }
+
+.player-profile-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 1.5rem;
+}
+
+.player-profile-img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.player-profile-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #e8f0fa;
+    color: #1a6fc4;
+    font-size: 28px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.player-profile-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #222;
+    margin: 0 0 4px;
+}
+
+.player-profile-country {
+    font-size: 13px;
+    color: #888;
+    margin: 0 0 6px;
+}
+
+.stats-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 500px) {
+    .stats-sections { grid-template-columns: 1fr; }
+}
+
+.stats-section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #E07020;
+    margin: 0 0 10px;
+}
+
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.stats-table tr td {
+    padding: 5px 4px;
+    border-bottom: 0.5px solid #f0f0f0;
+    color: #444;
+}
+
+.stats-table tr td:last-child {
+    text-align: right;
+    font-weight: 500;
+    color: #222;
+}
+
+.stats-format-header td {
+    font-size: 11px;
+    font-weight: 700;
+    color: #1a6fc4;
+    letter-spacing: 0.06em;
+    padding-top: 12px;
+    border-bottom: none;
+}
+
+/* ── Dashboard sections ── */
+.dash-section {
+    margin-top: 2rem;
+}
+
+.dash-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.dash-section-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #222;
+    margin: 0 0 0.75rem;
+}
+
+.dash-section-header .dash-section-title {
+    margin: 0;
+}
+
+.dash-section-link {
+    font-size: 13px;
+    color: #1a6fc4;
+    text-decoration: none;
+}
+
+.dash-section-link:hover { text-decoration: underline; }
+
+.dash-empty {
+    font-size: 13px;
+    color: #aaa;
+    padding: 1rem 0;
+}
+
+.dash-squad-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dash-squad-card {
+    background: #fff;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 14px 18px;
+}
+
+.dash-squad-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 4px;
+}
+
+.dash-squad-meta {
+    font-size: 12px;
+    color: #888;
+}
+
+/* ── Site nav admin link ── */
+.site-admin-link {
+    font-size: 13px;
+    color: #1a6fc4;
+    text-decoration: none;
+    border: 1px solid #1a6fc4;
+    border-radius: 16px;
+    padding: 5px 14px;
+}
+
+.site-admin-link:hover {
+    background: #e8f0fa;
 }

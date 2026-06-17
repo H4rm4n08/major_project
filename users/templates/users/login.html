@@ -1,15 +1,39 @@
 {% extends 'my_app/base.html' %}
 {% load static %}
-{% block title %}Login - My App{% endblock %}
+{% block title %}Sign In – Dream Squad{% endblock %}
 
 {% block content %}
-    <div class="login-container">
-        <form action="{% url 'users:login' %}" method="post">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            <input type="email" name="username" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <input type="submit" value="Login">
-        </form>
+<div class="auth-page">
+  <div class="auth-card">
+
+    <h1 class="auth-title">Build your dream<br>squad today</h1>
+
+    <div class="auth-badge">
+      <img src="{% static 'my_app/logo.png' %}" alt="Dream Squad Logo">
     </div>
+
+    <p class="auth-switch">Not registered? <a href="{% url 'users:register' %}">Sign up here</a></p>
+
+    {% if form.non_field_errors %}
+      <ul class="auth-errors">
+        {% for error in form.non_field_errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <form method="post" action="{% url 'users:login' %}">
+      {% csrf_token %}
+
+      <label class="auth-label">EMAIL</label>
+      <input class="auth-input" type="email" name="username" placeholder="you@example.com" required autofocus>
+
+      <label class="auth-label">PASSWORD</label>
+      <input class="auth-input" type="password" name="password" placeholder="••••••••" required>
+
+      <button class="auth-btn" type="submit">Sign in</button>
+    </form>
+
+  </div>
+</div>
 {% endblock %}

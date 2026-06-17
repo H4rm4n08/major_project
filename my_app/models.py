@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+import datetime
 
 
 # ---------------------------------------------------------
@@ -132,3 +134,82 @@ class SquadPlayer(models.Model):
 
     def __str__(self):
         return f"{self.player.name} in {self.squad.squad_name}"
+
+
+# ---------------------------------------------------------
+# API CACHE MODELS
+# ---------------------------------------------------------
+
+class LiveScoreCache(models.Model):
+    match_id = models.CharField(max_length=120, unique=True)
+    data = models.JSONField()
+    fetched_at = models.DateTimeField(auto_now=True)
+
+    STALE_AFTER = datetime.timedelta(minutes=5)
+
+    class Meta:
+        verbose_name = "Live Score Cache"
+        verbose_name_plural = "Live Score Cache"
+
+    def __str__(self):
+        return f"LiveScore {self.match_id}"
+
+    @classmethod
+    def is_fresh(cls):
+        latest = cls.objects.order_by('-fetched_at').first()
+        if not latest:
+            return False
+        return (timezone.now() - latest.fetched_at) < cls.STALE_AFTER
+
+    @classmethod
+    def all_data(cls):
+        return list(cls.objects.values_list('data', flat=True))
+
+
+class FixtureCache(models.Model):
+    match_id = models.CharField(max_length=120, unique=True)
+    data = models.JSONField()
+    fetched_at = models.DateTimeField(auto_now=True)
+
+    STALE_AFTER = datetime.timedelta(hours=1)
+
+    class Meta:
+        verbose_name = "Fixture Cache"
+        verbose_name_plural = "Fixture Cache"
+
+    def __str__(self):
+        return f"Fixture {self.match_id}"
+
+    @classmethod
+    def is_fresh(cls):
+        latest = cls.objects.order_by('-fetched_at').first()
+        if not latest:
+            return False
+        return (timezone.now() - latest.fetched_at) < cls.STALE_AFTER
+
+    @classmethod
+    def all_data(cls):
+        return list(cls.objects.values_list('data', flat=True))
+
+
+class PlayerStatsCache(models.Model):
+    player_id = models.CharField(max_length=120, unique=True)
+    data = models.JSONField()
+    fetched_at = models.DateTimeField(auto_now=True)
+
+    STALE_AFTER = datetime.timedelta(hours=24)
+
+    class Meta:
+        verbose_name = "Player Stats Cache"
+        verbose_name_plural = "Player Stats Cache"
+
+    def __str__(self):
+        return f"PlayerStats {self.player_id}"
+
+    @classmethod
+    def is_fresh(cls, player_id):
+        try:
+            entry = cls.objects.get(player_id=player_id)
+            return (timezone.now() - entry.fetched_at) < cls.STALE_AFTER
+        except cls.DoesNotExist:
+            return False

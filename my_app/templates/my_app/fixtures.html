@@ -1,0 +1,44 @@
+{% extends 'my_app/base.html' %}
+{% block title %}Fixtures – Dream Squad{% endblock %}
+
+{% block content %}
+<div class="cric-page">
+  <div class="cric-header">
+    <a class="cric-back" href="{% url 'my_app:home' %}">&#8592; Home</a>
+    <h1 class="cric-title">Fixtures</h1>
+  </div>
+
+  {% if fixtures %}
+    <div class="cric-list">
+      {% for match in fixtures %}
+      <div class="cric-card">
+        <div class="cric-card-top">
+          <span class="cric-series">{{ match.series|default:"International" }}</span>
+          <span class="cric-match-type">{{ match.matchType|upper|default:"MATCH" }}</span>
+        </div>
+        <div class="cric-teams">
+          <div class="cric-team">
+            <span class="cric-team-name">{{ match.teams.0|default:"TBD" }}</span>
+          </div>
+          <span class="cric-vs">vs</span>
+          <div class="cric-team">
+            <span class="cric-team-name">{{ match.teams.1|default:"TBD" }}</span>
+          </div>
+        </div>
+        <div class="cric-meta">
+          {% if match.date %}<span>📅 {{ match.date }}</span>{% endif %}
+          {% if match.venue %}<span>📍 {{ match.venue }}</span>{% endif %}
+        </div>
+        {% if match.status %}
+        <p class="cric-status">{{ match.status }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="cric-empty">
+      <p>No fixtures available right now.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

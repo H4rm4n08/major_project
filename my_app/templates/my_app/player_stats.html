@@ -1,0 +1,74 @@
+{% extends 'my_app/base.html' %}
+{% block title %}{{ stats.name|default:"Player" }} – Dream Squad{% endblock %}
+
+{% block content %}
+<div class="cric-page">
+  <div class="cric-header">
+    <a class="cric-back" href="{% url 'my_app:player_search' %}">&#8592; Players</a>
+    <h1 class="cric-title">{{ stats.name|default:"Player Profile" }}</h1>
+  </div>
+
+  {% if stats %}
+  <div class="cric-card player-profile">
+    <div class="player-profile-top">
+      {% if stats.cricapiPlayerImage %}
+        <img class="player-profile-img" src="{{ stats.cricapiPlayerImage }}" alt="{{ stats.name }}">
+      {% else %}
+        <div class="player-profile-avatar">{{ stats.name|slice:":1" }}</div>
+      {% endif %}
+      <div class="player-profile-meta">
+        <h2 class="player-profile-name">{{ stats.name }}</h2>
+        {% if stats.country %}<p class="player-profile-country">{{ stats.country }}</p>{% endif %}
+        {% if stats.role %}<span class="cric-badge upcoming">{{ stats.role }}</span>{% endif %}
+      </div>
+    </div>
+
+    {% if stats.batting or stats.bowling %}
+    <div class="stats-sections">
+
+      {% if stats.batting %}
+      <div class="stats-section">
+        <h3 class="stats-section-title">Batting</h3>
+        <table class="stats-table">
+          {% for format, row in stats.batting.items %}
+          <tr class="stats-format-header"><td colspan="2">{{ format|upper }}</td></tr>
+          {% if row.mat is not None %}<tr><td>Matches</td><td>{{ row.mat }}</td></tr>{% endif %}
+          {% if row.runs is not None %}<tr><td>Runs</td><td>{{ row.runs }}</td></tr>{% endif %}
+          {% if row.avg is not None %}<tr><td>Average</td><td>{{ row.avg }}</td></tr>{% endif %}
+          {% if row.sr is not None %}<tr><td>Strike Rate</td><td>{{ row.sr }}</td></tr>{% endif %}
+          {% if row.hs is not None %}<tr><td>High Score</td><td>{{ row.hs }}</td></tr>{% endif %}
+          {% if row.hundreds is not None %}<tr><td>100s</td><td>{{ row.hundreds }}</td></tr>{% endif %}
+          {% if row.fifties is not None %}<tr><td>50s</td><td>{{ row.fifties }}</td></tr>{% endif %}
+          {% endfor %}
+        </table>
+      </div>
+      {% endif %}
+
+      {% if stats.bowling %}
+      <div class="stats-section">
+        <h3 class="stats-section-title">Bowling</h3>
+        <table class="stats-table">
+          {% for format, row in stats.bowling.items %}
+          <tr class="stats-format-header"><td colspan="2">{{ format|upper }}</td></tr>
+          {% if row.mat is not None %}<tr><td>Matches</td><td>{{ row.mat }}</td></tr>{% endif %}
+          {% if row.wkts is not None %}<tr><td>Wickets</td><td>{{ row.wkts }}</td></tr>{% endif %}
+          {% if row.econ is not None %}<tr><td>Economy</td><td>{{ row.econ }}</td></tr>{% endif %}
+          {% if row.avg is not None %}<tr><td>Average</td><td>{{ row.avg }}</td></tr>{% endif %}
+          {% if row.sr is not None %}<tr><td>Strike Rate</td><td>{{ row.sr }}</td></tr>{% endif %}
+          {% if row.bbi is not None %}<tr><td>Best Innings</td><td>{{ row.bbi }}</td></tr>{% endif %}
+          {% endfor %}
+        </table>
+      </div>
+      {% endif %}
+
+    </div>
+    {% else %}
+      <p class="cric-status">No detailed stats available for this player.</p>
+    {% endif %}
+  </div>
+
+  {% else %}
+    <div class="cric-empty"><p>Player not found.</p></div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'my_app/base.html' %}
+{% block title %}Player Search – Dream Squad{% endblock %}
+
+{% block content %}
+<div class="cric-page">
+  <div class="cric-header">
+    <a class="cric-back" href="{% url 'my_app:home' %}">&#8592; Home</a>
+    <h1 class="cric-title">Player Stats</h1>
+  </div>
+
+  <form class="cric-search-form" method="get" action="{% url 'my_app:player_search' %}">
+    <input class="cric-search-input" type="text" name="q" value="{{ query }}" placeholder="Search player name…" autofocus>
+    <button class="cric-search-btn" type="submit">Search</button>
+  </form>
+
+  {% if query and not players %}
+    <div class="cric-empty"><p>No players found for "{{ query }}".</p></div>
+  {% endif %}
+
+  {% if players %}
+  <div class="cric-list">
+    {% for player in players %}
+    <a class="cric-card cric-card-link" href="{% url 'my_app:player_stats' player.id %}">
+      <div class="cric-player-row">
+        {% if player.cricapiPlayerImage %}
+          <img class="cric-player-img" src="{{ player.cricapiPlayerImage }}" alt="{{ player.name }}">
+        {% else %}
+          <div class="cric-player-avatar">{{ player.name|slice:":1" }}</div>
+        {% endif %}
+        <div class="cric-player-info">
+          <span class="cric-player-name">{{ player.name }}</span>
+          <span class="cric-player-meta">{{ player.country|default:"" }}</span>
+        </div>
+        <span class="cric-chevron">&#8250;</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

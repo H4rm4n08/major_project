@@ -87,3 +87,23 @@ class SquadPlayerAdmin(admin.ModelAdmin):
     list_filter = ["is_captain", "is_wicketkeeper", "is_substitute", "squad"]
     search_fields = ["squad__squad_name", "player__name"]
     autocomplete_fields = ["squad", "player"]
+
+from .models import LiveScoreCache, FixtureCache, PlayerStatsCache
+
+
+@admin.register(LiveScoreCache)
+class LiveScoreCacheAdmin(admin.ModelAdmin):
+    list_display = ["match_id", "fetched_at"]
+    readonly_fields = ["match_id", "data", "fetched_at"]
+
+
+@admin.register(FixtureCache)
+class FixtureCacheAdmin(admin.ModelAdmin):
+    list_display = ["match_id", "fetched_at"]
+    readonly_fields = ["match_id", "data", "fetched_at"]
+
+
+@admin.register(PlayerStatsCache)
+class PlayerStatsCacheAdmin(admin.ModelAdmin):
+    list_display = ["player_id", "fetched_at"]
+    readonly_fields = ["player_id", "data", "fetched_at"]

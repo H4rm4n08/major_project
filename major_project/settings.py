@@ -24,6 +24,8 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = config('DEBUG', cast=bool, default=False)
 
+CRICAPI_KEY = config('CRICAPI_KEY')
+
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
