@@ -32,17 +32,20 @@
 
   <!-- My Squads from DB -->
   <div class="dash-section">
-    <h2 class="dash-section-title">My Squads</h2>
+    <div class="dash-section-header">
+      <h2 class="dash-section-title">My Squads</h2>
+      <a class="dash-section-link" href="{% url 'my_app:squad_create' %}">+ Create Squad</a>
+    </div>
     {% if squads %}
       <div class="dash-squad-list">
         {% for squad in squads %}
-        <div class="dash-squad-card">
+        <a class="dash-squad-card" href="{% url 'my_app:squad_detail' squad.id %}">
           <div class="dash-squad-name">{{ squad.squad_name }}</div>
           <div class="dash-squad-meta">
             {% if squad.coach %}Coach: {{ squad.coach.name }} &nbsp;·&nbsp; {% endif %}
             {{ squad.players.count }} player{{ squad.players.count|pluralize }}
           </div>
-        </div>
+        </a>
         {% endfor %}
       </div>
     {% else %}

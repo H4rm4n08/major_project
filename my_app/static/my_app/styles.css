@@ -752,6 +752,11 @@ body {
     padding: 14px 18px;
 }
 
+.dash-squad-card {
+    text-decoration: none;
+    display: block;
+}
+
 .dash-squad-name {
     font-size: 15px;
     font-weight: 600;
@@ -776,4 +781,120 @@ body {
 
 .site-admin-link:hover {
     background: #e8f0fa;
+}
+
+/* ── Squad detail page ── */
+.squad-detail-page {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 28px 20px 40px;
+}
+
+.squad-detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.squad-detail-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #e8762c;
+    line-height: 1.2;
+}
+
+.squad-detail-subtitle {
+    font-size: 14px;
+    color: #888;
+    margin-top: 6px;
+}
+
+.squad-profile-icon {
+    font-size: 26px;
+    color: #555;
+}
+
+.squad-rating-banner {
+    background: #e8762c;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 22px;
+}
+
+.squad-rating-value {
+    display: block;
+    font-size: 22px;
+    margin-top: 4px;
+}
+
+.squad-aspects-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2b3a8f;
+    margin-bottom: 14px;
+}
+
+.squad-aspect-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 28px;
+}
+
+.squad-aspect-btn {
+    display: block;
+    background: #dce8fb;
+    color: #1a2b6b;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    padding: 14px;
+}
+
+.squad-aspect-btn:hover {
+    background: #c9dcf7;
+}
+
+.squad-aspect-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.squad-aspect-section {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 16px 18px;
+}
+
+.squad-aspect-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2b3a8f;
+    margin-bottom: 10px;
+}
+
+.squad-player-list {
+    font-size: 14px;
+    color: #333;
+    padding-left: 18px;
+}
+
+.squad-player-list li {
+    margin-bottom: 4px;
+}
+
+.squad-illustration {
+    text-align: center;
+    font-size: 40px;
+    margin-top: 30px;
 }

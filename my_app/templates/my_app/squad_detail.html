@@ -1,0 +1,90 @@
+{% extends 'my_app/base.html' %}
+{% block title %}{{ squad.squad_name }} – Dream Squad{% endblock %}
+
+{% block content %}
+<div class="squad-detail-page">
+
+  <div class="squad-detail-header">
+    <div>
+      <h1 class="squad-detail-title">Continue Your<br>Squad</h1>
+      <p class="squad-detail-subtitle">{{ squad.squad_name }}</p>
+    </div>
+    <span class="squad-profile-icon">&#128100;</span>
+  </div>
+
+  <div class="squad-rating-banner">
+    OVERALL TEAM RATING
+    <span class="squad-rating-value">{% if rating is not None %}{{ rating }}{% else %}N/A{% endif %}</span>
+  </div>
+
+  <h2 class="squad-aspects-title">Team Aspects</h2>
+
+  <div class="squad-aspect-list">
+    <a class="squad-aspect-btn" href="#batting-lineup">Batting Lineup</a>
+    <a class="squad-aspect-btn" href="#bowling-lineup">Bowling Lineup</a>
+    <a class="squad-aspect-btn" href="#fielding-positions">Feilding Positions</a>
+    <a class="squad-aspect-btn" href="#coaches">Coaches</a>
+    <a class="squad-aspect-btn" href="#full-squad">Full Squad Of {{ squad_players.count }}</a>
+  </div>
+
+  <div class="squad-aspect-sections">
+
+    <div class="squad-aspect-section" id="batting-lineup">
+      <h3 class="squad-aspect-section-title">Batting Lineup</h3>
+      {% if squad_players %}
+        <ol class="squad-player-list">
+          {% for sp in squad_players %}
+            <li>{{ sp.player.name }}{% if sp.is_captain %} (C){% endif %}{% if sp.is_wicketkeeper %} (WK){% endif %}</li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <p class="dash-empty">No players added yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="squad-aspect-section" id="bowling-lineup">
+      <h3 class="squad-aspect-section-title">Bowling Lineup</h3>
+      {% if squad_players %}
+        <ol class="squad-player-list">
+          {% for sp in squad_players %}
+            <li>{{ sp.player.name }} — {{ sp.player.stats.wickets_taken|default:0 }} wkts</li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <p class="dash-empty">No players added yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="squad-aspect-section" id="fielding-positions">
+      <h3 class="squad-aspect-section-title">Fielding Positions</h3>
+      <p class="dash-empty">Fielding positions coming soon.</p>
+    </div>
+
+    <div class="squad-aspect-section" id="coaches">
+      <h3 class="squad-aspect-section-title">Coaches</h3>
+      {% if squad.coach %}
+        <p>{{ squad.coach.name }} &nbsp;·&nbsp; Win rate {{ squad.coach.win_rate }}%</p>
+      {% else %}
+        <p class="dash-empty">No coach assigned yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="squad-aspect-section" id="full-squad">
+      <h3 class="squad-aspect-section-title">Full Squad</h3>
+      {% if squad_players %}
+        <ol class="squad-player-list">
+          {% for sp in squad_players %}
+            <li>{{ sp.player.name }} ({{ sp.player.country }})</li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <p class="dash-empty">No players added yet.</p>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <div class="squad-illustration">&#127951;&nbsp;&#127944;</div>
+
+</div>
+{% endblock %}

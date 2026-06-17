@@ -107,3 +107,12 @@ class FixtureCacheAdmin(admin.ModelAdmin):
 class PlayerStatsCacheAdmin(admin.ModelAdmin):
     list_display = ["player_id", "fetched_at"]
     readonly_fields = ["player_id", "data", "fetched_at"]
+
+
+from .models import PlayerSyncState
+
+
+@admin.register(PlayerSyncState)
+class PlayerSyncStateAdmin(admin.ModelAdmin):
+    list_display = ["last_offset", "updated_at"]
+    readonly_fields = ["last_offset", "updated_at"]

@@ -1,0 +1,28 @@
+{% extends 'my_app/base.html' %}
+{% block title %}Create Squad – Dream Squad{% endblock %}
+
+{% block content %}
+<div class="cric-page">
+  <div class="cric-header">
+    <a class="cric-back" href="{% url 'my_app:home' %}">&#8592; Home</a>
+    <h1 class="cric-title">Create Squad</h1>
+  </div>
+
+  <form class="auth-card" method="post">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="auth-errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <label class="auth-label" for="{{ form.squad_name.id_for_label }}">Squad Name</label>
+    {{ form.squad_name }}
+    {% if form.squad_name.errors %}<p class="auth-field-error">{{ form.squad_name.errors.0 }}</p>{% endif %}
+
+    <label class="auth-label" for="{{ form.coach.id_for_label }}">Coach (optional)</label>
+    {{ form.coach }}
+    {% if form.coach.errors %}<p class="auth-field-error">{{ form.coach.errors.0 }}</p>{% endif %}
+
+    <button class="auth-btn" type="submit">Create Squad</button>
+  </form>
+</div>
+{% endblock %}

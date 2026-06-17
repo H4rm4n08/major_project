@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
     path('', views.home_view, name='home'),
+    path('squads/create/', views.squad_create_view, name='squad_create'),
+    path('squads/<int:squad_id>/', views.squad_detail_view, name='squad_detail'),
     path('live/', views.live_scores_view, name='live_scores'),
     path('fixtures/', views.fixtures_view, name='fixtures'),
     path('players/', views.player_search_view, name='player_search'),

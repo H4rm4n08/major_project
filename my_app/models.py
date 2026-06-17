@@ -32,6 +32,7 @@ class Player(models.Model):
         related_name="players"
     )
     country = models.CharField(max_length=50)
+    cricapi_id = models.CharField(max_length=120, unique=True, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -213,3 +214,16 @@ class PlayerStatsCache(models.Model):
             return (timezone.now() - entry.fetched_at) < cls.STALE_AFTER
         except cls.DoesNotExist:
             return False
+
+
+class PlayerSyncState(models.Model):
+    """Singleton row tracking pagination progress through CricAPI's player list."""
+    last_offset = models.IntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Player Sync State"
+        verbose_name_plural = "Player Sync State"
+
+    def __str__(self):
+        return f"Resume offset: {self.last_offset}"
