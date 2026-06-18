@@ -426,12 +426,27 @@ body {
     padding: 2rem 1.5rem;
     max-width: 700px;
     margin: 0 auto;
+    position: relative;
+}
+
+.dash-bg-decor {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+        linear-gradient(180deg, rgba(245, 245, 245, 0.55), rgba(245, 245, 245, 0.9)),
+        url('cricket_ground_bg.svg') center / cover no-repeat;
 }
 
 .dash-welcome {
     text-align: center;
     margin-bottom: 2rem;
     position: relative;
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(4px);
+    border-radius: 20px;
+    padding: 1.75rem 1.25rem 1.5rem;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
 }
 
 .dash-logo {
@@ -883,6 +898,10 @@ body {
 /* ── Dashboard sections ── */
 .dash-section {
     margin-top: 2rem;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(3px);
+    border-radius: 16px;
+    padding: 1.1rem 1.1rem 1.25rem;
 }
 
 .dash-section-header {
