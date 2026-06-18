@@ -6,6 +6,13 @@ from . import cricapi_service, ratings
 
 SQUAD_SLOTS = range(1, 12)
 
+BOWLING_SLOT_LABELS = [
+    "Opening Bowler 1", "Opening Bowler 2",
+    "1st Change Bowler 1", "1st Change Bowler 2",
+    "2nd Change Bowler 1", "2nd Change Bowler 2",
+    "Part Time Bowler 1", "Part Time Bowler 2",
+]
+
 
 def _team_ratings(squad):
     """Batting/bowling/overall ratings out of 100 for a squad.
@@ -109,6 +116,50 @@ def squad_slot_view(request, squad_id, slot):
     return render(request, 'my_app/squad_slot.html', {
         'squad': squad,
         'slot': slot,
+        'query': query,
+        'results': results,
+    })
+
+
+@login_required(login_url='users:login')
+def squad_bowling_lineup_view(request, squad_id):
+    squad = get_object_or_404(Squad, id=squad_id, user=request.user)
+    squad_players = squad.players.select_related('player', 'player__role', 'player__stats').all()
+
+    assigned = {sp.bowling_order: sp for sp in squad_players if sp.bowling_order}
+    lineup = [
+        {'slot': i + 1, 'label': label, 'squad_player': assigned.get(i + 1)}
+        for i, label in enumerate(BOWLING_SLOT_LABELS)
+    ]
+
+    return render(request, 'my_app/squad_bowling_lineup.html', {
+        'squad': squad,
+        'lineup': lineup,
+    })
+
+
+@login_required(login_url='users:login')
+def squad_bowling_slot_view(request, squad_id, slot):
+    squad = get_object_or_404(Squad, id=squad_id, user=request.user)
+    label = BOWLING_SLOT_LABELS[slot - 1] if 1 <= slot <= len(BOWLING_SLOT_LABELS) else f"Bowler {slot}"
+
+    if request.method == 'POST':
+        player = get_object_or_404(Player, id=request.POST.get('player_id'))
+        SquadPlayer.objects.filter(
+            squad=squad, bowling_order=slot, is_substitute=False
+        ).exclude(player=player).update(bowling_order=None)
+        SquadPlayer.objects.update_or_create(
+            squad=squad, player=player,
+            defaults={'bowling_order': slot},
+        )
+        return redirect('my_app:squad_bowling_lineup', squad_id=squad.id)
+
+    query = request.GET.get('q', '').strip()
+    results = Player.objects.filter(name__icontains=query).select_related('role', 'stats') if query else []
+    return render(request, 'my_app/squad_bowling_slot.html', {
+        'squad': squad,
+        'slot': slot,
+        'label': label,
         'query': query,
         'results': results,
     })
