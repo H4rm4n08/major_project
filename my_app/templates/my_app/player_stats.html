@@ -38,6 +38,7 @@
       <div class="stats-section">
         <h3 class="stats-section-title">Bowling (ODI)</h3>
         <table class="stats-table">
+          {% if player.bowling_style_display %}<tr><td>Style</td><td>{{ player.bowling_style_display }}</td></tr>{% endif %}
           <tr><td>Wickets</td><td>{{ stats.wickets_taken }}</td></tr>
           {% if stats.bowling_economy is not None %}<tr><td>Economy</td><td>{{ stats.bowling_economy }}</td></tr>{% endif %}
         </table>

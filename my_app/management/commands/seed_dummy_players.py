@@ -16,6 +16,11 @@ COUNTRIES = ["India", "Australia", "England", "Pakistan", "South Africa", "New Z
 
 ROLES = ["Batsman", "Bowler", "All-rounder", "Wicketkeeper"]
 
+BOWLING_STYLES = [
+    ("fast", None), ("medium", None),
+    ("spin", "leg"), ("spin", "off"),
+]
+
 
 class Command(BaseCommand):
     help = "Seed the database with dummy male ODI international players and stats, for testing the squad-builder UI without touching the CricAPI quota."
@@ -35,10 +40,17 @@ class Command(BaseCommand):
             role_name = ROLES[i % len(ROLES)]
             cricapi_id = f"dummy-{i+1:03d}"
 
+            pace, spin_type = (None, None)
+            if role_name in ("Bowler", "All-rounder"):
+                pace, spin_type = BOWLING_STYLES[i % len(BOWLING_STYLES)]
+
             role, _ = PlayerRole.objects.get_or_create(role_name=role_name)
             player, _ = Player.objects.update_or_create(
                 cricapi_id=cricapi_id,
-                defaults={"name": name, "country": country, "role": role},
+                defaults={
+                    "name": name, "country": country, "role": role,
+                    "bowling_pace": pace, "bowling_spin_type": spin_type,
+                },
             )
 
             if role_name == "Bowler":

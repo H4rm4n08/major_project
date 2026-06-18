@@ -32,8 +32,8 @@ class PlayerRoleAdmin(admin.ModelAdmin):
 
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ["name", "role", "country", "get_runs", "get_wickets"]
-    list_filter = ["role", "country"]
+    list_display = ["name", "role", "country", "bowling_pace", "bowling_spin_type", "get_runs", "get_wickets"]
+    list_filter = ["role", "country", "bowling_pace", "bowling_spin_type"]
     search_fields = ["name", "country"]
     inlines = [PlayerStatsInline]
 

@@ -24,6 +24,17 @@ class PlayerRole(models.Model):
 # ---------------------------------------------------------
 
 class Player(models.Model):
+    PACE_CHOICES = [
+        ("fast", "Fast"),
+        ("medium", "Medium"),
+        ("spin", "Spin"),
+    ]
+    SPIN_TYPE_CHOICES = [
+        ("leg", "Leg Spin"),
+        ("off", "Off Spin"),
+        ("both", "Both"),
+    ]
+
     name = models.CharField(max_length=100)
     role = models.ForeignKey(
         PlayerRole,
@@ -33,9 +44,20 @@ class Player(models.Model):
     )
     country = models.CharField(max_length=50)
     cricapi_id = models.CharField(max_length=120, unique=True, null=True, blank=True)
+    bowling_pace = models.CharField(max_length=10, choices=PACE_CHOICES, null=True, blank=True)
+    bowling_spin_type = models.CharField(max_length=10, choices=SPIN_TYPE_CHOICES, null=True, blank=True)
 
     def __str__(self):
         return self.name
+
+    @property
+    def bowling_style_display(self):
+        if self.bowling_pace == "spin":
+            spin_label = dict(self.SPIN_TYPE_CHOICES).get(self.bowling_spin_type)
+            return f"Spin ({spin_label})" if spin_label else "Spin"
+        if self.bowling_pace:
+            return dict(self.PACE_CHOICES).get(self.bowling_pace)
+        return None
 
 
 # ---------------------------------------------------------

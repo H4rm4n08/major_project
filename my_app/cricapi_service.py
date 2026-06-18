@@ -148,6 +148,35 @@ def is_likely_odi_nation(country):
     return (country or "").strip().lower() in ODI_NATIONS
 
 
+def classify_bowling_style(bowling_style):
+    """Parse CricAPI's free-text bowlingStyle (e.g. "Right-arm medium",
+    "Legbreak googly", "Slow left-arm orthodox") into (pace, spin_type).
+
+    pace is one of "fast"/"medium"/"spin", or None if the player doesn't
+    bowl / style is unknown. spin_type is only set when pace == "spin".
+    """
+    style = (bowling_style or "").strip().lower()
+    if not style:
+        return None, None
+
+    has_leg = any(term in style for term in ("leg break", "legbreak", "leg-break", "googly", "wrist spin", "chinaman"))
+    has_off = any(term in style for term in ("off break", "offbreak", "off-break", "orthodox", "finger spin"))
+
+    if has_leg and has_off:
+        return "spin", "both"
+    if has_leg:
+        return "spin", "leg"
+    if has_off:
+        return "spin", "off"
+    if "spin" in style:
+        return "spin", None
+    if "fast" in style:
+        return "fast", None
+    if "medium" in style:
+        return "medium", None
+    return None, None
+
+
 def _to_int(value):
     try:
         return int(float(value))
@@ -181,11 +210,15 @@ def sync_player_to_db(player_id, data):
 
     name = data.get("name") or "Unknown Player"
     role_name = data.get("role") or "Unknown"
+    pace, spin_type = classify_bowling_style(data.get("bowlingStyle"))
 
     role, _ = PlayerRole.objects.get_or_create(role_name=role_name)
     player, _ = Player.objects.update_or_create(
         cricapi_id=player_id,
-        defaults={"name": name, "country": country, "role": role},
+        defaults={
+            "name": name, "country": country, "role": role,
+            "bowling_pace": pace, "bowling_spin_type": spin_type,
+        },
     )
 
     PlayerStats.objects.update_or_create(

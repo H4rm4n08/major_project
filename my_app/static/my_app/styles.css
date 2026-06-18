@@ -254,7 +254,7 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.85));
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .auth-card {
@@ -433,9 +433,7 @@ body {
     position: fixed;
     inset: 0;
     z-index: -1;
-    background:
-        linear-gradient(180deg, rgba(245, 245, 245, 0.55), rgba(245, 245, 245, 0.9)),
-        url('cricket_ground_bg.svg') center / cover no-repeat;
+    background: url('cricket_ground_bg.svg') center / cover no-repeat;
 }
 
 .dash-welcome {

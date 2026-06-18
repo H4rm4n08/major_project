@@ -1,72 +1,58 @@
-<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
   <defs>
-    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#aed6f0"/>
-      <stop offset="100%" stop-color="#eaf6fc"/>
-    </linearGradient>
-    <radialGradient id="sun" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#fff6da" stop-opacity="0.95"/>
-      <stop offset="100%" stop-color="#fff6da" stop-opacity="0"/>
+    <radialGradient id="glow" cx="38%" cy="32%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#74c98f"/>
-      <stop offset="100%" stop-color="#4a9d6a"/>
+    <linearGradient id="turf" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3fc46c"/>
+      <stop offset="100%" stop-color="#1f9e4f"/>
     </linearGradient>
-    <clipPath id="groundClip">
-      <ellipse cx="400" cy="520" rx="520" ry="260"/>
+    <clipPath id="fieldClip">
+      <ellipse cx="400" cy="400" rx="355" ry="355"/>
     </clipPath>
   </defs>
 
-  <rect x="0" y="0" width="800" height="600" fill="url(#sky)"/>
-  <circle cx="660" cy="90" r="120" fill="url(#sun)"/>
-  <circle cx="660" cy="90" r="34" fill="#fff3c2"/>
+  <rect x="0" y="0" width="800" height="800" fill="#eaf6ee"/>
 
-  <g opacity="0.85">
-    <ellipse cx="160" cy="95" rx="55" ry="18" fill="#ffffff"/>
-    <ellipse cx="205" cy="88" rx="38" ry="15" fill="#ffffff"/>
-    <animateTransform attributeName="transform" type="translate" values="0,0; 60,0; 0,0" dur="22s" repeatCount="indefinite"/>
-  </g>
-  <g opacity="0.75">
-    <ellipse cx="470" cy="60" rx="48" ry="15" fill="#ffffff"/>
-    <ellipse cx="510" cy="55" rx="30" ry="11" fill="#ffffff"/>
-    <animateTransform attributeName="transform" type="translate" values="0,0; -50,0; 0,0" dur="28s" repeatCount="indefinite"/>
-  </g>
-  <g opacity="0.7">
-    <ellipse cx="280" cy="50" rx="34" ry="11" fill="#ffffff"/>
-    <animateTransform attributeName="transform" type="translate" values="0,0; 40,0; 0,0" dur="18s" repeatCount="indefinite"/>
+  <ellipse cx="400" cy="400" rx="385" ry="385" fill="#15a35a"/>
+  <ellipse cx="400" cy="400" rx="355" ry="355" fill="url(#turf)"/>
+
+  <g clip-path="url(#fieldClip)" opacity="0.16">
+    <circle cx="400" cy="400" r="60" fill="none" stroke="#0c6b34" stroke-width="40"/>
+    <circle cx="400" cy="400" r="140" fill="none" stroke="#0c6b34" stroke-width="40"/>
+    <circle cx="400" cy="400" r="220" fill="none" stroke="#0c6b34" stroke-width="40"/>
+    <circle cx="400" cy="400" r="300" fill="none" stroke="#0c6b34" stroke-width="40"/>
+    <circle cx="400" cy="400" r="380" fill="none" stroke="#0c6b34" stroke-width="40"/>
   </g>
 
-  <ellipse cx="400" cy="520" rx="520" ry="260" fill="url(#ground)"/>
-  <g clip-path="url(#groundClip)" opacity="0.12">
-    <rect x="0" y="260" width="800" height="40" fill="#1d6b3a"/>
-    <rect x="0" y="340" width="800" height="40" fill="#1d6b3a"/>
-    <rect x="0" y="420" width="800" height="40" fill="#1d6b3a"/>
-    <rect x="0" y="500" width="800" height="40" fill="#1d6b3a"/>
-    <rect x="0" y="580" width="800" height="40" fill="#1d6b3a"/>
-    <rect x="0" y="660" width="800" height="40" fill="#1d6b3a"/>
-  </g>
-  <ellipse cx="400" cy="520" rx="320" ry="160" fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="3"/>
+  <circle cx="400" cy="400" r="220" fill="none" stroke="#ffffff" stroke-opacity="0.85" stroke-width="3"/>
+  <circle cx="400" cy="400" r="355" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="3"/>
 
   <g>
-    <rect x="250" y="295" width="300" height="125" fill="#f7f2e8"/>
-    <rect x="250" y="295" width="300" height="10" fill="#1e295d"/>
-    <polygon points="238,295 400,242 562,295" fill="#1e295d"/>
-    <rect x="280" y="335" width="36" height="60" fill="#cfe3f5"/>
-    <rect x="335" y="335" width="36" height="60" fill="#cfe3f5"/>
-    <rect x="390" y="335" width="36" height="60" fill="#cfe3f5"/>
-    <rect x="445" y="335" width="36" height="60" fill="#cfe3f5"/>
-    <rect x="500" y="335" width="36" height="60" fill="#cfe3f5"/>
-
-    <rect x="320" y="215" width="6" height="32" fill="#1e295d"/>
-    <polygon points="326,217 358,224 326,231" fill="#E07020">
-      <animateTransform attributeName="transform" type="scale" values="1,1; 0.85,1; 1,1" additive="sum" dur="2.4s" repeatCount="indefinite"/>
-    </polygon>
-
-    <rect x="474" y="215" width="6" height="32" fill="#1e295d"/>
-    <polygon points="480,217 512,225 480,233" fill="#1a6fc4">
-      <animateTransform attributeName="transform" type="scale" values="1,1; 0.85,1; 1,1" additive="sum" dur="2.1s" repeatCount="indefinite"/>
-    </polygon>
+    <rect x="382" y="290" width="36" height="220" fill="#dcc89a"/>
+    <rect x="382" y="290" width="36" height="220" fill="none" stroke="#bda878" stroke-width="2"/>
+    <line x1="382" y1="320" x2="418" y2="320" stroke="#bda878" stroke-width="2"/>
+    <line x1="382" y1="480" x2="418" y2="480" stroke="#bda878" stroke-width="2"/>
+    <g>
+      <rect x="388" y="305" width="3" height="14" fill="#1e295d"/>
+      <rect x="394" y="305" width="3" height="14" fill="#1e295d"/>
+      <rect x="400" y="305" width="3" height="14" fill="#1e295d"/>
+    </g>
+    <g>
+      <rect x="388" y="481" width="3" height="14" fill="#1e295d"/>
+      <rect x="394" y="481" width="3" height="14" fill="#1e295d"/>
+      <rect x="400" y="481" width="3" height="14" fill="#1e295d"/>
+    </g>
   </g>
 
-  <rect x="385" y="415" width="30" height="185" fill="#d8c896" opacity="0.9"/>
+  <circle cx="400" cy="400" r="385" fill="url(#glow)">
+    <animate attributeName="opacity" values="0.8;1;0.8" dur="6s" repeatCount="indefinite"/>
+  </circle>
+
+  <g opacity="0.5">
+    <circle cx="400" cy="400" r="370" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="2 14">
+      <animateTransform attributeName="transform" type="rotate" from="0 400 400" to="360 400 400" dur="120s" repeatCount="indefinite"/>
+    </circle>
+  </g>
 </svg>
