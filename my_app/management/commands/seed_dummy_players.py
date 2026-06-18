@@ -31,6 +31,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         count = options["count"]
         created = 0
+        bowler_index = 0
 
         for i in range(count):
             first = FIRST_NAMES[i % len(FIRST_NAMES)]
@@ -42,7 +43,8 @@ class Command(BaseCommand):
 
             pace, spin_type = (None, None)
             if role_name in ("Bowler", "All-rounder"):
-                pace, spin_type = BOWLING_STYLES[i % len(BOWLING_STYLES)]
+                pace, spin_type = BOWLING_STYLES[bowler_index % len(BOWLING_STYLES)]
+                bowler_index += 1
 
             role, _ = PlayerRole.objects.get_or_create(role_name=role_name)
             player, _ = Player.objects.update_or_create(
