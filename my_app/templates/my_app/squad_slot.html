@@ -4,7 +4,7 @@
 {% block content %}
 <div class="cric-page">
   <div class="cric-header">
-    <a class="cric-back" href="{% url 'my_app:squad_detail' squad.id %}">&#8592; {{ squad.squad_name }}</a>
+    <a class="cric-back" href="{% url 'my_app:squad_batting_lineup' squad.id %}">&#8592; Batting Lineup</a>
     <h1 class="cric-title">Batting Position {{ slot }}</h1>
   </div>
 

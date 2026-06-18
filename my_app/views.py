@@ -85,12 +85,23 @@ def squad_detail_view(request, squad_id):
     squad = get_object_or_404(Squad, id=squad_id, user=request.user)
     squad_players = squad.players.select_related('player', 'player__role', 'player__stats').all()
 
-    assigned = {sp.batting_order: sp for sp in squad_players if sp.batting_order}
-    lineup = [{'slot': slot, 'squad_player': assigned.get(slot)} for slot in SQUAD_SLOTS]
-
     return render(request, 'my_app/squad_detail.html', {
         'squad': squad,
         'squad_players': squad_players,
+        'ratings': _team_ratings(squad),
+    })
+
+
+@login_required(login_url='users:login')
+def squad_batting_lineup_view(request, squad_id):
+    squad = get_object_or_404(Squad, id=squad_id, user=request.user)
+    squad_players = squad.players.select_related('player', 'player__role', 'player__stats').all()
+
+    assigned = {sp.batting_order: sp for sp in squad_players if sp.batting_order}
+    lineup = [{'slot': slot, 'squad_player': assigned.get(slot)} for slot in SQUAD_SLOTS]
+
+    return render(request, 'my_app/squad_batting_lineup.html', {
+        'squad': squad,
         'lineup': lineup,
         'ratings': _team_ratings(squad),
     })
@@ -109,7 +120,7 @@ def squad_slot_view(request, squad_id, slot):
             squad=squad, player=player,
             defaults={'batting_order': slot},
         )
-        return redirect('my_app:squad_detail', squad_id=squad.id)
+        return redirect('my_app:squad_batting_lineup', squad_id=squad.id)
 
     query = request.GET.get('q', '').strip()
     results = Player.objects.filter(name__icontains=query).select_related('role', 'stats') if query else []
