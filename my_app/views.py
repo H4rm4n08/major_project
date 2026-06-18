@@ -15,29 +15,32 @@ BOWLING_SLOT_LABELS = [
 
 COACH_ROLES = {'head': 'Head Coach', 'assistant': 'Assistant Coach'}
 
-# (label, x, y) — coordinates placed by hand on a 560x580 field diagram to
+# (label, x, y) — coordinates placed by hand on a 640x680 field diagram to
 # roughly match a real fielding chart (slips/fine leg near the keeper at the
 # top, long-on/long-off out in front at the bottom). Not claiming exact
 # textbook angles, just a visual spread around the pitch.
 FIELDING_POSITIONS = [
-    ("Fine Leg", 168, 105),
-    ("Short Fine Leg", 252, 77),
-    ("Slip 1", 287, 161),
-    ("Slip 2", 245, 189),
-    ("Gully", 210, 224),
-    ("Point", 168, 273),
-    ("Extra Cover", 112, 238),
-    ("Backward Point", 77, 308),
-    ("Cover", 140, 350),
-    ("Mid-off", 217, 399),
-    ("Mid-on", 343, 399),
-    ("Mid-wicket", 413, 350),
-    ("Square-Leg", 448, 238),
-    ("Deep Backward Square-Leg", 483, 301),
-    ("Deep Mid-wicket", 469, 364),
-    ("Long-on", 371, 462),
-    ("Long-off", 252, 490),
+    ("Fine Leg", 185, 140),
+    ("Short Fine Leg", 300, 95),
+    ("Slip 1", 340, 205),
+    ("Slip 2", 280, 240),
+    ("Gully", 235, 270),
+    ("Point", 180, 330),
+    ("Extra Cover", 120, 290),
+    ("Backward Point", 80, 370),
+    ("Cover", 150, 420),
+    ("Mid-off", 250, 480),
+    ("Mid-on", 400, 480),
+    ("Mid-wicket", 480, 420),
+    ("Square-Leg", 525, 280),
+    ("Deep Backward Square-Leg", 565, 335),
+    ("Deep Mid-wicket", 545, 400),
+    ("Long-on", 430, 560),
+    ("Long-off", 290, 590),
 ]
+
+PILL_WIDTH = 92
+PILL_HEIGHT = 32
 
 
 def _wrap_two_lines(text, max_len=13):
@@ -58,8 +61,8 @@ def _pill_tspans(text):
     """Pre-compute (line, dy) pairs for vertically-centred SVG <tspan> rendering."""
     lines = _wrap_two_lines(text)
     if len(lines) == 1:
-        return [{'text': lines[0], 'dy': 5}]
-    return [{'text': lines[0], 'dy': -3}, {'text': lines[1], 'dy': 16}]
+        return [{'text': lines[0], 'dy': 4}]
+    return [{'text': lines[0], 'dy': -4}, {'text': lines[1], 'dy': 12}]
 
 
 def _team_ratings(squad):
@@ -239,7 +242,7 @@ def squad_fielding_view(request, squad_id):
         display_text = squad_player.player.name if squad_player else label
         lineup.append({
             'slot': i + 1, 'label': label, 'x': x, 'y': y,
-            'rect_x': x - 70, 'rect_y': y - 23,
+            'rect_x': x - PILL_WIDTH // 2, 'rect_y': y - PILL_HEIGHT // 2,
             'tspans': _pill_tspans(display_text),
             'squad_player': squad_player,
         })
