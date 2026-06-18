@@ -91,6 +91,13 @@ class Squad(models.Model):
         blank=True,
         related_name="coached_squads"
     )
+    assistant_coach = models.ForeignKey(
+        Coach,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="assistant_coached_squads"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

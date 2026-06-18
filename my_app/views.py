@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Squad, Player, SquadPlayer
+from .models import Squad, Player, SquadPlayer, Coach
 from .forms import SquadForm
 from . import cricapi_service, ratings
 
@@ -13,17 +13,20 @@ BOWLING_SLOT_LABELS = [
     "Part Time Bowler 1", "Part Time Bowler 2",
 ]
 
+COACH_ROLES = {'head': 'Head Coach', 'assistant': 'Assistant Coach'}
+
 
 def _team_ratings(squad):
     """Batting/bowling/overall ratings out of 100 for a squad.
 
     Batting rating is the average overall_rating of batsmen/all-rounders/
-    wicketkeepers, plus the coach's win_rate as an extra data point if a
-    coach is assigned. Bowling rating is the same idea for bowlers/
-    all-rounders, also including the coach's win_rate (an all-rounder, and
-    the coach, both count toward both groups). Overall is the average of
-    the two. If a group ends up empty, it falls back to whichever group
-    does have a value rather than treating the missing one as a zero.
+    wicketkeepers, plus the head coach's and assistant coach's win_rate as
+    extra data points if assigned. Bowling rating is the same idea for
+    bowlers/all-rounders, also including both coaches' win_rate (an
+    all-rounder, and each coach, count toward both groups). Overall is the
+    average of the two. If a group ends up empty, it falls back to
+    whichever group does have a value rather than treating the missing one
+    as a zero.
     """
     squad_players = squad.players.select_related('player', 'player__role', 'player__stats').all()
     rated = [sp.player.stats for sp in squad_players if hasattr(sp.player, 'stats') and sp.player.stats.overall_rating is not None]
@@ -38,10 +41,11 @@ def _team_ratings(squad):
         if category in ("bowler", "allrounder"):
             bowling_ratings.append(stats.overall_rating)
 
-    if squad.coach and squad.coach.win_rate is not None:
-        coach_rating = float(squad.coach.win_rate)
-        batting_ratings.append(coach_rating)
-        bowling_ratings.append(coach_rating)
+    for coach in (squad.coach, squad.assistant_coach):
+        if coach and coach.win_rate is not None:
+            coach_rating = float(coach.win_rate)
+            batting_ratings.append(coach_rating)
+            bowling_ratings.append(coach_rating)
 
     batting_rating = round(sum(batting_ratings) / len(batting_ratings)) if batting_ratings else None
     bowling_rating = round(sum(bowling_ratings) / len(bowling_ratings)) if bowling_ratings else None
@@ -171,6 +175,43 @@ def squad_bowling_slot_view(request, squad_id, slot):
     return render(request, 'my_app/squad_bowling_slot.html', {
         'squad': squad,
         'slot': slot,
+        'label': label,
+        'query': query,
+        'results': results,
+    })
+
+
+@login_required(login_url='users:login')
+def squad_coaches_view(request, squad_id):
+    squad = get_object_or_404(Squad, id=squad_id, user=request.user)
+    coaches = [
+        {'role': 'head', 'label': COACH_ROLES['head'], 'coach': squad.coach},
+        {'role': 'assistant', 'label': COACH_ROLES['assistant'], 'coach': squad.assistant_coach},
+    ]
+    return render(request, 'my_app/squad_coaches.html', {
+        'squad': squad,
+        'coaches': coaches,
+        'ratings': _team_ratings(squad),
+    })
+
+
+@login_required(login_url='users:login')
+def squad_coach_slot_view(request, squad_id, role):
+    squad = get_object_or_404(Squad, id=squad_id, user=request.user)
+    label = COACH_ROLES.get(role, 'Coach')
+    field_name = 'assistant_coach' if role == 'assistant' else 'coach'
+
+    if request.method == 'POST':
+        coach = get_object_or_404(Coach, id=request.POST.get('coach_id'))
+        setattr(squad, field_name, coach)
+        squad.save()
+        return redirect('my_app:squad_coaches', squad_id=squad.id)
+
+    query = request.GET.get('q', '').strip()
+    results = Coach.objects.filter(name__icontains=query) if query else []
+    return render(request, 'my_app/squad_coach_slot.html', {
+        'squad': squad,
+        'role': role,
         'label': label,
         'query': query,
         'results': results,

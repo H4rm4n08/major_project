@@ -23,7 +23,7 @@
     <a class="squad-aspect-btn" href="{% url 'my_app:squad_batting_lineup' squad.id %}">Batting Lineup</a>
     <a class="squad-aspect-btn" href="{% url 'my_app:squad_bowling_lineup' squad.id %}">Bowling Lineup</a>
     <a class="squad-aspect-btn" href="#fielding-positions">Feilding Positions</a>
-    <a class="squad-aspect-btn" href="#coaches">Coaches</a>
+    <a class="squad-aspect-btn" href="{% url 'my_app:squad_coaches' squad.id %}">Coaches</a>
     <a class="squad-aspect-btn" href="#full-squad">Full Squad Of {{ squad_players.count }}</a>
   </div>
 
@@ -32,15 +32,6 @@
     <div class="squad-aspect-section" id="fielding-positions">
       <h3 class="squad-aspect-section-title">Fielding Positions</h3>
       <p class="dash-empty">Fielding positions coming soon.</p>
-    </div>
-
-    <div class="squad-aspect-section" id="coaches">
-      <h3 class="squad-aspect-section-title">Coaches</h3>
-      {% if squad.coach %}
-        <p>{{ squad.coach.name }} &nbsp;·&nbsp; Win rate {{ squad.coach.win_rate }}%</p>
-      {% else %}
-        <p class="dash-empty">No coach assigned yet.</p>
-      {% endif %}
     </div>
 
     <div class="squad-aspect-section" id="full-squad">
