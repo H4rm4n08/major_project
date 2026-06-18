@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from my_app.models import Player, PlayerSyncState
-from my_app import cricapi_service
+from my_app import cricapi_service, ratings
 
 # Surnames of well-known male ODI internationals, current and past, across the
 # major cricketing nations. CricAPI's free-tier player database has ~17,000
@@ -89,6 +89,9 @@ class Command(BaseCommand):
             if term_index == 0:
                 self.stdout.write("Cycled through all search terms — looping back to the start next run.")
                 break
+
+        if synced:
+            ratings.recalculate_all_ratings()
 
         self.stdout.write(self.style.SUCCESS(
             f"Done. Synced {synced} new male ODI players using ~{api_calls} API calls. "

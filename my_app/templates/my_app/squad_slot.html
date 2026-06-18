@@ -29,6 +29,7 @@
           <span class="cric-player-name">{{ player.name }}</span>
           <span class="cric-player-meta">{{ player.country|default:"" }}{% if player.role %} · {{ player.role }}{% endif %}</span>
         </div>
+        {% if player.stats.overall_rating %}<span class="player-rating-badge">{{ player.stats.overall_rating }}</span>{% endif %}
         <button class="squad-aspect-btn" type="submit" style="width:auto;padding:8px 16px;">Add</button>
       </div>
     </form>

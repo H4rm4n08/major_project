@@ -54,6 +54,7 @@ class PlayerStats(models.Model):
     strike_rate_bat = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     wickets_taken = models.IntegerField(default=0)
     bowling_economy = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    overall_rating = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"Stats for {self.player.name}"

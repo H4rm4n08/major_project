@@ -8,14 +8,14 @@ SQUAD_SLOTS = range(1, 12)
 
 
 def _team_rating(squad_players):
-    """Rough overall rating out of 100, blending batting average and wickets across the squad."""
-    rated = [sp.player.stats for sp in squad_players if hasattr(sp.player, 'stats')]
-    if not rated:
+    """Overall squad rating out of 100 — the average of each assigned player's own overall_rating."""
+    ratings_list = [
+        sp.player.stats.overall_rating for sp in squad_players
+        if hasattr(sp.player, 'stats') and sp.player.stats.overall_rating is not None
+    ]
+    if not ratings_list:
         return None
-    avg_batting = sum(float(s.batting_avg or 0) for s in rated) / len(rated)
-    avg_wickets = sum(s.wickets_taken for s in rated) / len(rated)
-    rating = (avg_batting * 1.2) + (avg_wickets * 2)
-    return round(min(rating, 100))
+    return round(sum(ratings_list) / len(ratings_list))
 
 
 @login_required(login_url='users:login')
@@ -76,7 +76,7 @@ def squad_slot_view(request, squad_id, slot):
         return redirect('my_app:squad_detail', squad_id=squad.id)
 
     query = request.GET.get('q', '').strip()
-    results = Player.objects.filter(name__icontains=query).select_related('role') if query else []
+    results = Player.objects.filter(name__icontains=query).select_related('role', 'stats') if query else []
     return render(request, 'my_app/squad_slot.html', {
         'squad': squad,
         'slot': slot,
@@ -100,7 +100,7 @@ def fixtures_view(request):
 @login_required(login_url='users:login')
 def player_search_view(request):
     query = request.GET.get('q', '').strip()
-    players = Player.objects.filter(name__icontains=query).select_related('role') if query else []
+    players = Player.objects.filter(name__icontains=query).select_related('role', 'stats') if query else []
     return render(request, 'my_app/player_search.html', {'players': players, 'query': query})
 
 

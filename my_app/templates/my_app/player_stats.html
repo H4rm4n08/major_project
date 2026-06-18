@@ -17,6 +17,12 @@
         {% if player.country %}<p class="player-profile-country">{{ player.country }}</p>{% endif %}
         {% if player.role %}<span class="cric-badge upcoming">{{ player.role }}</span>{% endif %}
       </div>
+      {% if stats.overall_rating %}
+      <div class="player-rating-circle">
+        <span class="player-rating-circle-value">{{ stats.overall_rating }}</span>
+        <span class="player-rating-circle-label">OVR</span>
+      </div>
+      {% endif %}
     </div>
 
     {% if stats %}

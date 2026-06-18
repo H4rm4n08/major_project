@@ -652,6 +652,42 @@ body {
     margin: 0 0 4px;
 }
 
+.player-rating-circle {
+    margin-left: auto;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #e8762c;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.player-rating-circle-value {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.player-rating-circle-label {
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+}
+
+.player-rating-badge {
+    background: #e8762c;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+}
+
 .player-profile-country {
     font-size: 13px;
     color: #888;

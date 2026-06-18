@@ -1,6 +1,7 @@
 import random
 from django.core.management.base import BaseCommand
 from my_app.models import Player, PlayerRole, PlayerStats
+from my_app import ratings
 
 FIRST_NAMES = [
     "James", "Liam", "Noah", "Oliver", "Ethan", "Lucas", "Mason", "Logan", "Henry", "Jack",
@@ -66,4 +67,5 @@ class Command(BaseCommand):
             created += 1
             self.stdout.write(f"  seeded: {name} ({country}, {role_name})")
 
+        ratings.recalculate_all_ratings()
         self.stdout.write(self.style.SUCCESS(f"Done. Seeded {created} dummy male ODI players."))
