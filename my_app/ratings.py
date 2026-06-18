@@ -35,6 +35,11 @@ TEAM_STRENGTH = {
 }
 DEFAULT_TEAM_STRENGTH = 0.80
 
+# Flat bonus added to all-rounders' raw score, before the team-strength
+# multiplier, to account for their fielding/versatility value that isn't
+# captured by any single batting or bowling stat.
+ALLROUNDER_VERSATILITY_BONUS = 8
+
 
 def _percentile(value, all_values, lower_is_better=False):
     """Where `value` ranks among `all_values`, as 0-100. Neutral 50 if unknown."""
@@ -84,7 +89,16 @@ def recalculate_all_ratings():
         if category == "bowler":
             raw = bowling_score
         elif category == "allrounder":
-            raw = batting_score * 0.5 + bowling_score * 0.5
+            # A straight 50/50 average punishes all-rounders unfairly: they're
+            # percentile-ranked in both disciplines against specialists who
+            # concentrate fully in one, so their weaker secondary skill drags
+            # the average down even when their primary skill is excellent.
+            # Weight toward whichever discipline they're actually strong in,
+            # and add a flat bonus reflecting the extra value of being a
+            # genuine dual threat (effective fielding and tactical flexibility
+            # that a pure specialist doesn't offer, even though no fielding
+            # stats exist to score directly).
+            raw = max(batting_score, bowling_score) * 0.65 + min(batting_score, bowling_score) * 0.35 + ALLROUNDER_VERSATILITY_BONUS
         else:
             raw = batting_score
 
