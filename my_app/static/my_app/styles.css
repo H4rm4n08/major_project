@@ -1101,10 +1101,21 @@ body {
 
 .bowling-slot-filled {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 14px;
+}
+
+.bowling-slot-link {
+    flex: 1;
+    min-width: 0;
+    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    padding: 10px 14px;
+    text-decoration: none;
+    color: inherit;
 }
 
 .bowling-slot-player {
@@ -1195,6 +1206,29 @@ body {
     font-weight: 700;
     color: #888;
     text-transform: uppercase;
+}
+
+.squad-slot-remove-form {
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.squad-slot-remove-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid #e0e0e0;
+    background: #fff;
+    color: #999;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.squad-slot-remove-btn:hover {
+    border-color: #d9534f;
+    color: #d9534f;
+    background: #fdecea;
 }
 
 .squad-slot-player {

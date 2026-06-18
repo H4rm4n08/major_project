@@ -16,13 +16,20 @@
   <div class="squad-aspect-list">
     {% for row in lineup %}
       {% if row.squad_player %}
-        <a class="squad-aspect-btn bowling-slot-filled" href="{% url 'my_app:squad_bowling_slot' squad.id row.slot %}">
-          <span class="bowling-slot-player">
-            {{ row.squad_player.player.name }}
-            {% if row.squad_player.player.stats.overall_rating %}<span class="player-rating-badge">{{ row.squad_player.player.stats.overall_rating }}</span>{% endif %}
-          </span>
-          {% if row.squad_player.player.bowling_style_display %}<span class="bowling-slot-style">{{ row.squad_player.player.bowling_style_display }}</span>{% endif %}
-        </a>
+        <div class="squad-aspect-btn bowling-slot-filled">
+          <a class="bowling-slot-link" href="{% url 'my_app:squad_bowling_slot' squad.id row.slot %}">
+            <span class="bowling-slot-player">
+              {{ row.squad_player.player.name }}
+              {% if row.squad_player.player.stats.overall_rating %}<span class="player-rating-badge">{{ row.squad_player.player.stats.overall_rating }}</span>{% endif %}
+            </span>
+            {% if row.squad_player.player.bowling_style_display %}<span class="bowling-slot-style">{{ row.squad_player.player.bowling_style_display }}</span>{% endif %}
+          </a>
+          <form method="post" action="{% url 'my_app:squad_bowling_slot' squad.id row.slot %}" class="squad-slot-remove-form">
+            {% csrf_token %}
+            <input type="hidden" name="remove" value="1">
+            <button class="squad-slot-remove-btn" type="submit" title="Remove from this slot" aria-label="Remove from this slot">&times;</button>
+          </form>
+        </div>
       {% else %}
         <a class="squad-aspect-btn" href="{% url 'my_app:squad_bowling_slot' squad.id row.slot %}">{{ row.label }}</a>
       {% endif %}
