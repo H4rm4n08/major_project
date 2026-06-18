@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Squad, Player
+from .models import Squad, Player, SquadPlayer
 from .forms import SquadForm
 from . import cricapi_service
+
+SQUAD_SLOTS = range(1, 12)
 
 
 def _team_rating(squad_players):
@@ -46,10 +48,40 @@ def squad_create_view(request):
 def squad_detail_view(request, squad_id):
     squad = get_object_or_404(Squad, id=squad_id, user=request.user)
     squad_players = squad.players.select_related('player', 'player__role', 'player__stats').all()
+
+    assigned = {sp.batting_order: sp for sp in squad_players if sp.batting_order}
+    lineup = [{'slot': slot, 'squad_player': assigned.get(slot)} for slot in SQUAD_SLOTS]
+
     return render(request, 'my_app/squad_detail.html', {
         'squad': squad,
         'squad_players': squad_players,
+        'lineup': lineup,
         'rating': _team_rating(squad_players),
+    })
+
+
+@login_required(login_url='users:login')
+def squad_slot_view(request, squad_id, slot):
+    squad = get_object_or_404(Squad, id=squad_id, user=request.user)
+
+    if request.method == 'POST':
+        player = get_object_or_404(Player, id=request.POST.get('player_id'))
+        SquadPlayer.objects.filter(
+            squad=squad, batting_order=slot, is_substitute=False
+        ).exclude(player=player).update(batting_order=None)
+        SquadPlayer.objects.update_or_create(
+            squad=squad, player=player,
+            defaults={'batting_order': slot},
+        )
+        return redirect('my_app:squad_detail', squad_id=squad.id)
+
+    query = request.GET.get('q', '').strip()
+    results = Player.objects.filter(name__icontains=query).select_related('role') if query else []
+    return render(request, 'my_app/squad_slot.html', {
+        'squad': squad,
+        'slot': slot,
+        'query': query,
+        'results': results,
     })
 
 

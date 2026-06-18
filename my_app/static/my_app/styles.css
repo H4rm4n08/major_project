@@ -893,6 +893,55 @@ body {
     margin-bottom: 4px;
 }
 
+.squad-slot-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.squad-slot-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.squad-slot-number {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #2b3a8f;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.squad-slot-player {
+    color: #222;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.squad-slot-player:hover {
+    text-decoration: underline;
+}
+
+.squad-slot-empty {
+    color: #1a6fc4;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.squad-slot-empty:hover {
+    text-decoration: underline;
+}
+
 .squad-illustration {
     text-align: center;
     font-size: 40px;

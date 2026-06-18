@@ -107,9 +107,25 @@ def _find_stat(stats_list, fn_name, matchtype, stat_key):
 
 
 def has_odi_stats(stats_list):
+    """True only if the player has actually played at least one ODI match.
+
+    CricAPI returns a zeroed-out ODI stats template (matches played = "0") for
+    players who've never played one, so checking for the matchtype's presence
+    alone isn't enough — the "m" (matches) stat must be a positive number.
+    """
     if not isinstance(stats_list, list):
         return False
-    return any(str(entry.get("matchtype", "")).strip().lower() == "odi" for entry in stats_list)
+    for entry in stats_list:
+        if (
+            str(entry.get("matchtype", "")).strip().lower() == "odi"
+            and str(entry.get("stat", "")).strip().lower() == "m"
+        ):
+            try:
+                if int(float(entry.get("value", 0))) > 0:
+                    return True
+            except (TypeError, ValueError):
+                continue
+    return False
 
 
 def is_male_player(country):

@@ -31,15 +31,20 @@
 
     <div class="squad-aspect-section" id="batting-lineup">
       <h3 class="squad-aspect-section-title">Batting Lineup</h3>
-      {% if squad_players %}
-        <ol class="squad-player-list">
-          {% for sp in squad_players %}
-            <li>{{ sp.player.name }}{% if sp.is_captain %} (C){% endif %}{% if sp.is_wicketkeeper %} (WK){% endif %}</li>
-          {% endfor %}
-        </ol>
-      {% else %}
-        <p class="dash-empty">No players added yet.</p>
-      {% endif %}
+      <ol class="squad-slot-list">
+        {% for row in lineup %}
+          <li class="squad-slot-row">
+            <span class="squad-slot-number">{{ row.slot }}</span>
+            {% if row.squad_player %}
+              <a class="squad-slot-player" href="{% url 'my_app:player_stats' row.squad_player.player.cricapi_id %}">
+                {{ row.squad_player.player.name }}{% if row.squad_player.is_captain %} (C){% endif %}{% if row.squad_player.is_wicketkeeper %} (WK){% endif %}
+              </a>
+            {% else %}
+              <a class="squad-slot-empty" href="{% url 'my_app:squad_slot' squad.id row.slot %}">+ Search &amp; add player</a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
     </div>
 
     <div class="squad-aspect-section" id="bowling-lineup">
@@ -47,7 +52,7 @@
       {% if squad_players %}
         <ol class="squad-player-list">
           {% for sp in squad_players %}
-            <li>{{ sp.player.name }} — {{ sp.player.stats.wickets_taken|default:0 }} wkts</li>
+            <li><a href="{% url 'my_app:player_stats' sp.player.cricapi_id %}">{{ sp.player.name }}</a> — {{ sp.player.stats.wickets_taken|default:0 }} wkts</li>
           {% endfor %}
         </ol>
       {% else %}
@@ -74,7 +79,7 @@
       {% if squad_players %}
         <ol class="squad-player-list">
           {% for sp in squad_players %}
-            <li>{{ sp.player.name }} ({{ sp.player.country }})</li>
+            <li><a href="{% url 'my_app:player_stats' sp.player.cricapi_id %}">{{ sp.player.name }}</a> ({{ sp.player.country }})</li>
           {% endfor %}
         </ol>
       {% else %}

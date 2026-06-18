@@ -1,0 +1,39 @@
+{% extends 'my_app/base.html' %}
+{% block title %}Batting Position {{ slot }} – Dream Squad{% endblock %}
+
+{% block content %}
+<div class="cric-page">
+  <div class="cric-header">
+    <a class="cric-back" href="{% url 'my_app:squad_detail' squad.id %}">&#8592; {{ squad.squad_name }}</a>
+    <h1 class="cric-title">Batting Position {{ slot }}</h1>
+  </div>
+
+  <form class="cric-search-form" method="get">
+    <input class="cric-search-input" type="text" name="q" value="{{ query }}" placeholder="Search player name…" autofocus>
+    <button class="cric-search-btn" type="submit">Search</button>
+  </form>
+
+  {% if query and not results %}
+    <div class="cric-empty"><p>No players found for "{{ query }}".</p></div>
+  {% endif %}
+
+  {% if results %}
+  <div class="cric-list">
+    {% for player in results %}
+    <form class="cric-card" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="player_id" value="{{ player.id }}">
+      <div class="cric-player-row">
+        <div class="cric-player-avatar">{{ player.name|slice:":1" }}</div>
+        <div class="cric-player-info">
+          <span class="cric-player-name">{{ player.name }}</span>
+          <span class="cric-player-meta">{{ player.country|default:"" }}{% if player.role %} · {{ player.role }}{% endif %}</span>
+        </div>
+        <button class="squad-aspect-btn" type="submit" style="width:auto;padding:8px 16px;">Add</button>
+      </div>
+    </form>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
