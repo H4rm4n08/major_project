@@ -2,8 +2,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Major Project{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'my_app/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'my_app/styles.css' %}?v={% now 'U' %}">
 </head>
 <body>
     {% if request.user.is_authenticated %}
