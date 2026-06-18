@@ -38,7 +38,7 @@ DEFAULT_TEAM_STRENGTH = 0.80
 # Flat bonus added to all-rounders' raw score, before the team-strength
 # multiplier, to account for their fielding/versatility value that isn't
 # captured by any single batting or bowling stat.
-ALLROUNDER_VERSATILITY_BONUS = 8
+ALLROUNDER_VERSATILITY_BONUS = 15
 
 
 def _percentile(value, all_values, lower_is_better=False):
@@ -98,7 +98,7 @@ def recalculate_all_ratings():
             # genuine dual threat (effective fielding and tactical flexibility
             # that a pure specialist doesn't offer, even though no fielding
             # stats exist to score directly).
-            raw = max(batting_score, bowling_score) * 0.65 + min(batting_score, bowling_score) * 0.35 + ALLROUNDER_VERSATILITY_BONUS
+            raw = max(batting_score, bowling_score) * 0.75 + min(batting_score, bowling_score) * 0.25 + ALLROUNDER_VERSATILITY_BONUS
         else:
             raw = batting_score
 
