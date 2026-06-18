@@ -1021,3 +1021,52 @@ body {
     font-size: 40px;
     margin-top: 30px;
 }
+
+.field-diagram {
+    width: 100%;
+    max-width: 420px;
+    display: block;
+    margin: 18px auto 12px;
+}
+
+.field-pos-pill {
+    width: 100%;
+    height: 100%;
+    background: #dce8fb;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.field-pos-pill.filled {
+    background: #e8762c;
+}
+
+.field-pos-pill a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a2b6b;
+    font-size: 9px;
+    font-weight: 700;
+    text-decoration: none;
+    line-height: 1.1;
+    padding: 2px;
+    overflow: hidden;
+}
+
+.field-pos-pill.filled a {
+    color: #fff;
+}
+
+.field-diagram-hint {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 20px;
+}

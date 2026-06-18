@@ -15,11 +15,28 @@ BOWLING_SLOT_LABELS = [
 
 COACH_ROLES = {'head': 'Head Coach', 'assistant': 'Assistant Coach'}
 
+# (label, x, y) — coordinates placed by hand on a 400x400 field diagram to
+# roughly match a real fielding chart (slips/fine leg near the keeper at the
+# top, long-on/long-off out in front at the bottom). Not claiming exact
+# textbook angles, just a visual spread around the pitch.
 FIELDING_POSITIONS = [
-    "Fine Leg", "Short Fine Leg", "Slip 1", "Slip 2", "Gully", "Point",
-    "Extra Cover", "Backward Point", "Cover", "Mid-off", "Mid-on",
-    "Mid-wicket", "Square-Leg", "Deep Backward Square-Leg",
-    "Deep Mid-wicket", "Long-on", "Long-off",
+    ("Fine Leg", 120, 75),
+    ("Short Fine Leg", 180, 55),
+    ("Slip 1", 205, 115),
+    ("Slip 2", 175, 135),
+    ("Gully", 150, 160),
+    ("Point", 120, 195),
+    ("Extra Cover", 80, 170),
+    ("Backward Point", 55, 220),
+    ("Cover", 100, 250),
+    ("Mid-off", 155, 285),
+    ("Mid-on", 245, 285),
+    ("Mid-wicket", 295, 250),
+    ("Square-Leg", 320, 170),
+    ("Deep Backward Square-Leg", 345, 215),
+    ("Deep Mid-wicket", 335, 260),
+    ("Long-on", 265, 330),
+    ("Long-off", 180, 350),
 ]
 
 
@@ -195,8 +212,12 @@ def squad_fielding_view(request, squad_id):
 
     assigned = {sp.fielding_position: sp for sp in squad_players if sp.fielding_position}
     lineup = [
-        {'slot': i + 1, 'label': label, 'squad_player': assigned.get(label)}
-        for i, label in enumerate(FIELDING_POSITIONS)
+        {
+            'slot': i + 1, 'label': label, 'x': x, 'y': y,
+            'pill_x': x - 50, 'pill_y': y - 14,
+            'squad_player': assigned.get(label),
+        }
+        for i, (label, x, y) in enumerate(FIELDING_POSITIONS)
     ]
 
     return render(request, 'my_app/squad_fielding.html', {
@@ -208,7 +229,7 @@ def squad_fielding_view(request, squad_id):
 @login_required(login_url='users:login')
 def squad_fielding_slot_view(request, squad_id, slot):
     squad = get_object_or_404(Squad, id=squad_id, user=request.user)
-    label = FIELDING_POSITIONS[slot - 1] if 1 <= slot <= len(FIELDING_POSITIONS) else f"Position {slot}"
+    label = FIELDING_POSITIONS[slot - 1][0] if 1 <= slot <= len(FIELDING_POSITIONS) else f"Position {slot}"
 
     if request.method == 'POST':
         player = get_object_or_404(Player, id=request.POST.get('player_id'))
