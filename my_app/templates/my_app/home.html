@@ -6,6 +6,7 @@
 <div class="dash-page">
 
   <div class="dash-welcome">
+    <span class="dash-ball" aria-hidden="true"></span>
     <img src="{% static 'my_app/logo.png' %}" alt="Logo" class="dash-logo">
     <h1 class="dash-title">Welcome, {{ request.user.first_name|default:request.user.username }}!</h1>
     <p class="dash-subtitle">Your cricket hub — live scores, fixtures and player stats.</p>

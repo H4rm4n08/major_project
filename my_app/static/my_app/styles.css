@@ -243,16 +243,74 @@ body {
     justify-content: center;
     align-items: center;
     padding: 2rem 1rem;
+    position: relative;
+    overflow: hidden;
+    background-image: url('cricket_ground_bg.svg');
+    background-size: cover;
+    background-position: center;
+}
+
+.auth-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.85));
 }
 
 .auth-card {
+    position: relative;
+    z-index: 1;
     width: 100%;
     max-width: 360px;
     background: #ffffff;
     border-radius: 28px;
     border: 2px solid #d0d0d0;
     padding: 28px 24px 32px;
-    box-shadow: 0 0 0 6px #f0f0f0, 0 0 0 7px #d0d0d0;
+    box-shadow: 0 0 0 6px #f0f0f0, 0 0 0 7px #d0d0d0, 0 12px 30px rgba(0, 0, 0, 0.12);
+    animation: page-fade-in 0.45s ease both;
+}
+
+.floating-ball {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #e8512c, #b8351a);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 0;
+}
+
+.floating-ball::before,
+.floating-ball::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 8%;
+    width: 84%;
+    height: 1px;
+    background: #f7d9c8;
+    transform: translateY(-50%) rotate(20deg);
+}
+
+.floating-ball::after {
+    transform: translateY(-50%) rotate(-20deg);
+}
+
+.floating-ball--one {
+    top: 12%;
+    left: 8%;
+    animation: ball-float 5s ease-in-out infinite;
+}
+
+.floating-ball--two {
+    bottom: 14%;
+    right: 9%;
+    animation: ball-float 6s ease-in-out infinite reverse;
+}
+
+@keyframes ball-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-18px) rotate(180deg); }
 }
 
 .auth-title {
@@ -373,6 +431,7 @@ body {
 .dash-welcome {
     text-align: center;
     margin-bottom: 2rem;
+    position: relative;
 }
 
 .dash-logo {
@@ -380,6 +439,41 @@ body {
     height: 80px;
     object-fit: contain;
     margin-bottom: 12px;
+    animation: logo-bounce-in 0.6s ease both;
+}
+
+@keyframes logo-bounce-in {
+    0% { transform: scale(0.5) rotate(-15deg); opacity: 0; }
+    60% { transform: scale(1.08) rotate(5deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.dash-ball {
+    position: absolute;
+    top: -6px;
+    right: 18%;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #e8512c, #b8351a);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+    animation: ball-float 4.5s ease-in-out infinite;
+}
+
+.dash-ball::before,
+.dash-ball::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 8%;
+    width: 84%;
+    height: 1px;
+    background: #f7d9c8;
+    transform: translateY(-50%) rotate(20deg);
+}
+
+.dash-ball::after {
+    transform: translateY(-50%) rotate(-20deg);
 }
 
 .dash-title {
@@ -419,7 +513,15 @@ body {
     box-shadow: 0 4px 16px rgba(224,112,32,0.12);
 }
 
-.dash-card-icon { font-size: 32px; }
+.dash-card-icon {
+    font-size: 32px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.dash-card:hover .dash-card-icon {
+    transform: rotate(-12deg) scale(1.15);
+}
 
 .dash-card-label {
     font-size: 15px;
@@ -1121,7 +1223,6 @@ body {
 
 .stats-section,
 .squad-aspect-section,
-.player-profile,
-.auth-card {
+.player-profile {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
