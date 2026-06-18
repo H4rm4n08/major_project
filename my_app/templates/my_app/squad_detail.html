@@ -34,7 +34,7 @@
       {% if squad_players %}
         <ol class="squad-player-list">
           {% for sp in squad_players %}
-            <li><a href="{% url 'my_app:player_stats' sp.player.cricapi_id %}">{{ sp.player.name }}</a> ({{ sp.player.country }})</li>
+            <li><a href="{% url 'my_app:player_stats' sp.player.cricapi_id %}">{{ sp.player.name }}</a> ({{ sp.player.country }}{% if sp.player.bowling_style_display %} · {{ sp.player.bowling_style_display }}{% endif %})</li>
           {% endfor %}
         </ol>
       {% else %}
