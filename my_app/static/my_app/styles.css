@@ -945,11 +945,37 @@ body {
     border: 1.5px solid #e0e0e0;
     border-radius: 12px;
     padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
 }
 
-.dash-squad-card {
+.dash-squad-card-link {
+    flex: 1;
+    min-width: 0;
     text-decoration: none;
     display: block;
+    color: inherit;
+}
+
+.dash-squad-delete-btn {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid #e0e0e0;
+    background: #fff;
+    color: #999;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.dash-squad-delete-btn:hover {
+    border-color: #d9534f;
+    color: #d9534f;
+    background: #fdecea;
 }
 
 .dash-squad-name {

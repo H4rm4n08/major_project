@@ -41,13 +41,20 @@
     {% if squads %}
       <div class="dash-squad-list">
         {% for squad in squads %}
-        <a class="dash-squad-card" href="{% url 'my_app:squad_detail' squad.id %}">
-          <div class="dash-squad-name">{{ squad.squad_name }}</div>
-          <div class="dash-squad-meta">
-            {% if squad.coach %}Coach: {{ squad.coach.name }} &nbsp;·&nbsp; {% endif %}
-            {{ squad.players.count }} player{{ squad.players.count|pluralize }}
-          </div>
-        </a>
+        <div class="dash-squad-card">
+          <a class="dash-squad-card-link" href="{% url 'my_app:squad_detail' squad.id %}">
+            <div class="dash-squad-name">{{ squad.squad_name }}</div>
+            <div class="dash-squad-meta">
+              {% if squad.coach %}Coach: {{ squad.coach.name }} &nbsp;·&nbsp; {% endif %}
+              {{ squad.players.count }} player{{ squad.players.count|pluralize }}
+            </div>
+          </a>
+          <form method="post" action="{% url 'my_app:squad_delete' squad.id %}"
+                onsubmit="return confirm('Delete {{ squad.squad_name }}? This cannot be undone.');">
+            {% csrf_token %}
+            <button class="dash-squad-delete-btn" type="submit" title="Delete squad" aria-label="Delete squad">&times;</button>
+          </form>
+        </div>
         {% endfor %}
       </div>
     {% else %}
