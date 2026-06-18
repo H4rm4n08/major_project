@@ -124,6 +124,7 @@ class SquadPlayer(models.Model):
     )
     batting_order = models.PositiveSmallIntegerField(null=True, blank=True)
     bowling_order = models.PositiveSmallIntegerField(null=True, blank=True)
+    fielding_position = models.CharField(max_length=40, null=True, blank=True)
     is_captain = models.BooleanField(default=False)
     is_wicketkeeper = models.BooleanField(default=False)
     is_substitute = models.BooleanField(default=False)
@@ -143,6 +144,11 @@ class SquadPlayer(models.Model):
             models.UniqueConstraint(
                 fields=["squad", "bowling_order"],
                 name="unique_bowling_order_per_squad",
+                condition=models.Q(is_substitute=False)
+            ),
+            models.UniqueConstraint(
+                fields=["squad", "fielding_position"],
+                name="unique_fielding_position_per_squad",
                 condition=models.Q(is_substitute=False)
             ),
         ]

@@ -22,17 +22,12 @@
   <div class="squad-aspect-list">
     <a class="squad-aspect-btn" href="{% url 'my_app:squad_batting_lineup' squad.id %}">Batting Lineup</a>
     <a class="squad-aspect-btn" href="{% url 'my_app:squad_bowling_lineup' squad.id %}">Bowling Lineup</a>
-    <a class="squad-aspect-btn" href="#fielding-positions">Feilding Positions</a>
+    <a class="squad-aspect-btn" href="{% url 'my_app:squad_fielding' squad.id %}">Feilding Positions</a>
     <a class="squad-aspect-btn" href="{% url 'my_app:squad_coaches' squad.id %}">Coaches</a>
     <a class="squad-aspect-btn" href="#full-squad">Full Squad Of {{ squad_players.count }}</a>
   </div>
 
   <div class="squad-aspect-sections">
-
-    <div class="squad-aspect-section" id="fielding-positions">
-      <h3 class="squad-aspect-section-title">Fielding Positions</h3>
-      <p class="dash-empty">Fielding positions coming soon.</p>
-    </div>
 
     <div class="squad-aspect-section" id="full-squad">
       <h3 class="squad-aspect-section-title">Full Squad</h3>

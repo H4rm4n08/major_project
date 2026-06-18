@@ -15,6 +15,13 @@ BOWLING_SLOT_LABELS = [
 
 COACH_ROLES = {'head': 'Head Coach', 'assistant': 'Assistant Coach'}
 
+FIELDING_POSITIONS = [
+    "Fine Leg", "Short Fine Leg", "Slip 1", "Slip 2", "Gully", "Point",
+    "Extra Cover", "Backward Point", "Cover", "Mid-off", "Mid-on",
+    "Mid-wicket", "Square-Leg", "Deep Backward Square-Leg",
+    "Deep Mid-wicket", "Long-on", "Long-off",
+]
+
 
 def _team_ratings(squad):
     """Batting/bowling/overall ratings out of 100 for a squad.
@@ -173,6 +180,50 @@ def squad_bowling_slot_view(request, squad_id, slot):
     query = request.GET.get('q', '').strip()
     results = Player.objects.filter(name__icontains=query).select_related('role', 'stats') if query else []
     return render(request, 'my_app/squad_bowling_slot.html', {
+        'squad': squad,
+        'slot': slot,
+        'label': label,
+        'query': query,
+        'results': results,
+    })
+
+
+@login_required(login_url='users:login')
+def squad_fielding_view(request, squad_id):
+    squad = get_object_or_404(Squad, id=squad_id, user=request.user)
+    squad_players = squad.players.select_related('player', 'player__role', 'player__stats').all()
+
+    assigned = {sp.fielding_position: sp for sp in squad_players if sp.fielding_position}
+    lineup = [
+        {'slot': i + 1, 'label': label, 'squad_player': assigned.get(label)}
+        for i, label in enumerate(FIELDING_POSITIONS)
+    ]
+
+    return render(request, 'my_app/squad_fielding.html', {
+        'squad': squad,
+        'lineup': lineup,
+    })
+
+
+@login_required(login_url='users:login')
+def squad_fielding_slot_view(request, squad_id, slot):
+    squad = get_object_or_404(Squad, id=squad_id, user=request.user)
+    label = FIELDING_POSITIONS[slot - 1] if 1 <= slot <= len(FIELDING_POSITIONS) else f"Position {slot}"
+
+    if request.method == 'POST':
+        player = get_object_or_404(Player, id=request.POST.get('player_id'))
+        SquadPlayer.objects.filter(
+            squad=squad, fielding_position=label, is_substitute=False
+        ).exclude(player=player).update(fielding_position=None)
+        SquadPlayer.objects.update_or_create(
+            squad=squad, player=player,
+            defaults={'fielding_position': label},
+        )
+        return redirect('my_app:squad_fielding', squad_id=squad.id)
+
+    query = request.GET.get('q', '').strip()
+    results = Player.objects.filter(name__icontains=query).select_related('role', 'stats') if query else []
+    return render(request, 'my_app/squad_fielding_slot.html', {
         'squad': squad,
         'slot': slot,
         'label': label,
