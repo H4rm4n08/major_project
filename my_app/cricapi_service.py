@@ -132,6 +132,22 @@ def is_male_player(country):
     return "women" not in (country or "").lower()
 
 
+# Nations that have ever held ODI status. Used to skip namesakes from
+# domestic/club teams or non-cricketing countries before spending an API call
+# on a stats lookup for them.
+ODI_NATIONS = {
+    "india", "australia", "england", "pakistan", "south africa", "new zealand",
+    "sri lanka", "bangladesh", "west indies", "afghanistan", "zimbabwe", "ireland",
+    "netherlands", "scotland", "u.a.e.", "uae", "oman", "nepal", "usa",
+    "united states of america", "canada", "kenya", "namibia", "papua new guinea",
+    "hong kong", "uganda", "bermuda", "east africa",
+}
+
+
+def is_likely_odi_nation(country):
+    return (country or "").strip().lower() in ODI_NATIONS
+
+
 def _to_int(value):
     try:
         return int(float(value))

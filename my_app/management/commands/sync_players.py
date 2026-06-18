@@ -2,12 +2,13 @@ from django.core.management.base import BaseCommand
 from my_app.models import Player, PlayerSyncState
 from my_app import cricapi_service
 
-# Surnames of well-known current/recent male ODI internationals across the major
-# cricketing nations. CricAPI's free-tier player database has ~17,000 entries that
-# are mostly domestic/minor-league players with no ODI record, so a blind
-# alphabet-letter search mostly misses. Searching by these names reliably surfaces
-# real internationals with ODI stats instead.
+# Surnames of well-known male ODI internationals, current and past, across the
+# major cricketing nations. CricAPI's free-tier player database has ~17,000
+# entries that are mostly domestic/minor-league players with no ODI record, so
+# a blind alphabet-letter search mostly misses. Searching by these names
+# reliably surfaces real internationals with ODI stats instead.
 SEARCH_TERMS = [
+    # current/recent
     "Kohli", "Sharma", "Rahul", "Pant", "Iyer", "Gill", "Jadeja", "Ashwin", "Bumrah", "Pandya",
     "Babar", "Rizwan", "Shaheen", "Shadab", "Imam", "Fakhar",
     "Williamson", "Conway", "Mitchell", "Latham", "Phillips", "Boult", "Southee",
@@ -17,6 +18,15 @@ SEARCH_TERMS = [
     "Shakib", "Mahmudullah", "Tamim", "Litton", "Mushfiqur", "Mustafizur",
     "Hasaranga", "Mendis", "Mathews", "Karunaratne",
     "Rashid", "Mujeeb", "Naveen", "Gurbaz", "Nabi",
+    # past/retired greats
+    "Tendulkar", "Dravid", "Ganguly", "Dhoni", "Sehwag", "Yuvraj", "Kumble", "Zaheer",
+    "Ponting", "Gilchrist", "Warne", "McGrath", "Waugh", "Hayden", "Lee", "Symonds",
+    "Akram", "Miandad", "Inzamam", "Younis", "Afridi", "Akhtar", "Malik",
+    "Lara", "Richards", "Gayle", "Sobers", "Chanderpaul", "Ambrose",
+    "Vaughan", "Flintoff", "Pietersen", "Trescothick", "Anderson", "Broad",
+    "Jayasuriya", "Sangakkara", "Muralitharan", "Dilshan", "Malinga",
+    "Crowe", "Fleming", "McCullum", "Vettori",
+    "Kallis", "Pollock", "Smith", "Steyn", "de Villiers", "Amla",
 ]
 
 
@@ -58,6 +68,11 @@ class Command(BaseCommand):
 
                 player_id = entry.get("id")
                 if not player_id or Player.objects.filter(cricapi_id=player_id).exists():
+                    continue
+
+                # Skip namesakes from clubs/counties/non-cricketing countries
+                # without spending a stats-lookup call on them.
+                if not cricapi_service.is_likely_odi_nation(entry.get("country")):
                     continue
 
                 stats = cricapi_service.get_player_stats(player_id)
