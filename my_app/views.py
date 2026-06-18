@@ -5,6 +5,7 @@ from .forms import SquadForm
 from . import cricapi_service, ratings
 
 SQUAD_SLOTS = range(1, 12)
+TWELFTH_MAN_SLOT = 12
 
 BOWLING_SLOT_LABELS = [
     "Opening Bowler 1", "Opening Bowler 2",
@@ -146,12 +147,24 @@ def squad_detail_view(request, squad_id):
 
 
 @login_required(login_url='users:login')
+def squad_delete_view(request, squad_id):
+    squad = get_object_or_404(Squad, id=squad_id, user=request.user)
+    if request.method == 'POST':
+        squad.delete()
+        return redirect('my_app:home')
+    return redirect('my_app:squad_detail', squad_id=squad.id)
+
+
+@login_required(login_url='users:login')
 def squad_batting_lineup_view(request, squad_id):
     squad = get_object_or_404(Squad, id=squad_id, user=request.user)
     squad_players = squad.players.select_related('player', 'player__role', 'player__stats').all()
 
     assigned = {sp.batting_order: sp for sp in squad_players if sp.batting_order}
-    lineup = [{'slot': slot, 'squad_player': assigned.get(slot)} for slot in SQUAD_SLOTS]
+    lineup = [
+        {'slot': slot, 'label': '12th Man' if slot == TWELFTH_MAN_SLOT else None, 'squad_player': assigned.get(slot)}
+        for slot in list(SQUAD_SLOTS) + [TWELFTH_MAN_SLOT]
+    ]
 
     return render(request, 'my_app/squad_batting_lineup.html', {
         'squad': squad,
@@ -163,8 +176,18 @@ def squad_batting_lineup_view(request, squad_id):
 @login_required(login_url='users:login')
 def squad_slot_view(request, squad_id, slot):
     squad = get_object_or_404(Squad, id=squad_id, user=request.user)
+    label = '12th Man' if slot == TWELFTH_MAN_SLOT else f'Batting Position {slot}'
+    current = SquadPlayer.objects.filter(
+        squad=squad, batting_order=slot, is_substitute=False
+    ).select_related('player', 'player__stats').first()
 
     if request.method == 'POST':
+        if request.POST.get('remove'):
+            if current:
+                current.batting_order = None
+                current.save(update_fields=['batting_order'])
+            return redirect('my_app:squad_batting_lineup', squad_id=squad.id)
+
         player = get_object_or_404(Player, id=request.POST.get('player_id'))
         SquadPlayer.objects.filter(
             squad=squad, batting_order=slot, is_substitute=False
@@ -180,6 +203,8 @@ def squad_slot_view(request, squad_id, slot):
     return render(request, 'my_app/squad_slot.html', {
         'squad': squad,
         'slot': slot,
+        'label': label,
+        'current': current,
         'query': query,
         'results': results,
     })
@@ -207,8 +232,17 @@ def squad_bowling_lineup_view(request, squad_id):
 def squad_bowling_slot_view(request, squad_id, slot):
     squad = get_object_or_404(Squad, id=squad_id, user=request.user)
     label = BOWLING_SLOT_LABELS[slot - 1] if 1 <= slot <= len(BOWLING_SLOT_LABELS) else f"Bowler {slot}"
+    current = SquadPlayer.objects.filter(
+        squad=squad, bowling_order=slot, is_substitute=False
+    ).select_related('player', 'player__stats').first()
 
     if request.method == 'POST':
+        if request.POST.get('remove'):
+            if current:
+                current.bowling_order = None
+                current.save(update_fields=['bowling_order'])
+            return redirect('my_app:squad_bowling_lineup', squad_id=squad.id)
+
         player = get_object_or_404(Player, id=request.POST.get('player_id'))
         SquadPlayer.objects.filter(
             squad=squad, bowling_order=slot, is_substitute=False
@@ -225,6 +259,7 @@ def squad_bowling_slot_view(request, squad_id, slot):
         'squad': squad,
         'slot': slot,
         'label': label,
+        'current': current,
         'query': query,
         'results': results,
     })

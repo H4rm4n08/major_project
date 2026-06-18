@@ -1,12 +1,23 @@
 {% extends 'my_app/base.html' %}
-{% block title %}Batting Position {{ slot }} – Dream Squad{% endblock %}
+{% block title %}{{ label }} – Dream Squad{% endblock %}
 
 {% block content %}
 <div class="cric-page">
   <div class="cric-header">
     <a class="cric-back" href="{% url 'my_app:squad_batting_lineup' squad.id %}">&#8592; Batting Lineup</a>
-    <h1 class="cric-title">Batting Position {{ slot }}</h1>
+    <h1 class="cric-title">{{ label }}</h1>
   </div>
+
+  {% if current %}
+  <div class="slot-current-card">
+    <span>Currently: <strong>{{ current.player.name }}</strong></span>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="remove" value="1">
+      <button class="slot-remove-btn" type="submit">Remove</button>
+    </form>
+  </div>
+  {% endif %}
 
   <form class="cric-search-form" method="get">
     <input class="cric-search-input" type="text" name="q" value="{{ query }}" placeholder="Search player name…" autofocus>

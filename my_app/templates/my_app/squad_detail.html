@@ -46,5 +46,11 @@
 
   <div class="squad-illustration">&#127951;&nbsp;&#127944;</div>
 
+  <form method="post" action="{% url 'my_app:squad_delete' squad.id %}"
+        onsubmit="return confirm('Delete {{ squad.squad_name }}? This cannot be undone.');">
+    {% csrf_token %}
+    <button class="squad-delete-btn" type="submit">Delete Squad</button>
+  </form>
+
 </div>
 {% endblock %}

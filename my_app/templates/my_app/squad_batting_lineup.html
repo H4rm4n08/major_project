@@ -16,7 +16,8 @@
   <ol class="squad-slot-list">
     {% for row in lineup %}
       <li class="squad-slot-row">
-        <span class="squad-slot-number">{{ row.slot }}</span>
+        <span class="squad-slot-number">{% if row.label %}12{% else %}{{ row.slot }}{% endif %}</span>
+        {% if row.label %}<span class="squad-slot-label-text">{{ row.label }}</span>{% endif %}
         {% if row.squad_player %}
           <a class="squad-slot-player" href="{% url 'my_app:player_stats' row.squad_player.player.cricapi_id %}">
             {{ row.squad_player.player.name }}{% if row.squad_player.is_captain %} (C){% endif %}{% if row.squad_player.is_wicketkeeper %} (WK){% endif %}

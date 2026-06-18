@@ -8,6 +8,17 @@
     <h1 class="cric-title">{{ label }}</h1>
   </div>
 
+  {% if current %}
+  <div class="slot-current-card">
+    <span>Currently: <strong>{{ current.player.name }}</strong></span>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="remove" value="1">
+      <button class="slot-remove-btn" type="submit">Remove</button>
+    </form>
+  </div>
+  {% endif %}
+
   <form class="cric-search-form" method="get">
     <input class="cric-search-input" type="text" name="q" value="{{ query }}" placeholder="Search player name…" autofocus>
     <button class="cric-search-btn" type="submit">Search</button>
