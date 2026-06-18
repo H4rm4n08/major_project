@@ -2,20 +2,45 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Squad, Player, SquadPlayer
 from .forms import SquadForm
-from . import cricapi_service
+from . import cricapi_service, ratings
 
 SQUAD_SLOTS = range(1, 12)
 
 
 def _team_rating(squad_players):
-    """Overall squad rating out of 100 — the average of each assigned player's own overall_rating."""
-    ratings_list = [
-        sp.player.stats.overall_rating for sp in squad_players
-        if hasattr(sp.player, 'stats') and sp.player.stats.overall_rating is not None
-    ]
-    if not ratings_list:
+    """Overall squad rating out of 100: (batting rating + bowling rating) / 2.
+
+    Batting rating is the average overall_rating of batsmen/all-rounders/
+    wicketkeepers; bowling rating is the average overall_rating of bowlers/
+    all-rounders (an all-rounder counts in both groups). If the squad has
+    nobody in one of the two groups, the overall rating falls back to
+    whichever group does have players, rather than treating the missing
+    group as a zero.
+    """
+    rated = [sp.player.stats for sp in squad_players if hasattr(sp.player, 'stats') and sp.player.stats.overall_rating is not None]
+    if not rated:
         return None
-    return round(sum(ratings_list) / len(ratings_list))
+
+    batting_ratings = []
+    bowling_ratings = []
+    for stats in rated:
+        role = stats.player.role.role_name if stats.player.role else ""
+        category = ratings.role_category(role)
+        if category in ("batsman", "allrounder"):
+            batting_ratings.append(stats.overall_rating)
+        if category in ("bowler", "allrounder"):
+            bowling_ratings.append(stats.overall_rating)
+
+    batting_rating = sum(batting_ratings) / len(batting_ratings) if batting_ratings else None
+    bowling_rating = sum(bowling_ratings) / len(bowling_ratings) if bowling_ratings else None
+
+    if batting_rating is not None and bowling_rating is not None:
+        return round((batting_rating + bowling_rating) / 2)
+    if batting_rating is not None:
+        return round(batting_rating)
+    if bowling_rating is not None:
+        return round(bowling_rating)
+    return None
 
 
 @login_required(login_url='users:login')

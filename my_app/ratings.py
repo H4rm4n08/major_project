@@ -47,7 +47,7 @@ def _percentile(value, all_values, lower_is_better=False):
     return round((rank / len(all_values)) * 100)
 
 
-def _role_category(role_name):
+def role_category(role_name):
     name = (role_name or "").lower()
     if "all" in name:
         return "allrounder"
@@ -80,7 +80,7 @@ def recalculate_all_ratings():
         bowling_score = wkts_pct * 0.6 + econ_pct * 0.4
 
         role = stats.player.role.role_name if stats.player.role else ""
-        category = _role_category(role)
+        category = role_category(role)
         if category == "bowler":
             raw = bowling_score
         elif category == "allrounder":
