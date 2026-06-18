@@ -918,12 +918,6 @@ body {
     padding: 10px 14px;
 }
 
-.bowling-slot-label {
-    font-size: 12px;
-    font-weight: 700;
-    opacity: 0.8;
-}
-
 .bowling-slot-player {
     display: flex;
     align-items: center;

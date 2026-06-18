@@ -135,6 +135,7 @@ def squad_bowling_lineup_view(request, squad_id):
     return render(request, 'my_app/squad_bowling_lineup.html', {
         'squad': squad,
         'lineup': lineup,
+        'ratings': _team_ratings(squad),
     })
 
 
