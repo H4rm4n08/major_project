@@ -1,8 +1,27 @@
+@view-transition {
+    navigation: auto;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+a, button, input, select, textarea {
+    transition: background-color 0.15s ease, border-color 0.15s ease,
+                box-shadow 0.15s ease, transform 0.15s ease, color 0.15s ease;
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible {
+    outline: 2px solid #1a6fc4;
+    outline-offset: 2px;
 }
 
 body {
@@ -11,6 +30,21 @@ body {
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
+}
+
+@keyframes page-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.site-main {
+    animation: page-fade-in 0.35s ease both;
 }
 
 /* ── Site layout ── */
@@ -704,6 +738,12 @@ body {
     .stats-sections { grid-template-columns: 1fr; }
 }
 
+.stats-section {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
 .stats-section-title {
     font-size: 15px;
     font-weight: 600;
@@ -1042,4 +1082,46 @@ body {
     font-size: 13px;
     color: #888;
     margin-bottom: 20px;
+}
+
+/* ── Global hover/lift polish for clickable cards & buttons ── */
+.dash-card,
+.cric-card,
+.dash-squad-card,
+.squad-aspect-btn,
+.auth-btn,
+.cric-search-btn,
+.site-logout-btn {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.dash-card:hover,
+.cric-card:hover,
+.dash-squad-card:hover,
+.squad-aspect-btn:hover,
+.squad-slot-empty:hover,
+.squad-slot-player:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.auth-btn:hover,
+.cric-search-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.auth-btn:active,
+.cric-search-btn:active,
+.squad-aspect-btn:active,
+.dash-card:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.stats-section,
+.squad-aspect-section,
+.player-profile,
+.auth-card {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
