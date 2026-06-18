@@ -14,7 +14,7 @@
 
   <div class="squad-rating-banner">
     OVERALL TEAM RATING
-    <span class="squad-rating-value">{% if rating is not None %}{{ rating }}{% else %}N/A{% endif %}</span>
+    <span class="squad-rating-value">{% if ratings.overall is not None %}{{ ratings.overall }}{% else %}N/A{% endif %}</span>
   </div>
 
   <h2 class="squad-aspects-title">Team Aspects</h2>
@@ -30,7 +30,10 @@
   <div class="squad-aspect-sections">
 
     <div class="squad-aspect-section" id="batting-lineup">
-      <h3 class="squad-aspect-section-title">Batting Lineup</h3>
+      <div class="squad-aspect-section-header">
+        <h3 class="squad-aspect-section-title">Batting Lineup</h3>
+        {% if ratings.batting is not None %}<span class="player-rating-badge">{{ ratings.batting }}</span>{% endif %}
+      </div>
       <ol class="squad-slot-list">
         {% for row in lineup %}
           <li class="squad-slot-row">
@@ -49,7 +52,10 @@
     </div>
 
     <div class="squad-aspect-section" id="bowling-lineup">
-      <h3 class="squad-aspect-section-title">Bowling Lineup</h3>
+      <div class="squad-aspect-section-header">
+        <h3 class="squad-aspect-section-title">Bowling Lineup</h3>
+        {% if ratings.bowling is not None %}<span class="player-rating-badge">{{ ratings.bowling }}</span>{% endif %}
+      </div>
       {% if squad_players %}
         <ol class="squad-player-list">
           {% for sp in squad_players %}

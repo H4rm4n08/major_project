@@ -7,19 +7,19 @@ from . import cricapi_service, ratings
 SQUAD_SLOTS = range(1, 12)
 
 
-def _team_rating(squad_players):
-    """Overall squad rating out of 100: (batting rating + bowling rating) / 2.
+def _team_ratings(squad):
+    """Batting/bowling/overall ratings out of 100 for a squad.
 
     Batting rating is the average overall_rating of batsmen/all-rounders/
-    wicketkeepers; bowling rating is the average overall_rating of bowlers/
-    all-rounders (an all-rounder counts in both groups). If the squad has
-    nobody in one of the two groups, the overall rating falls back to
-    whichever group does have players, rather than treating the missing
-    group as a zero.
+    wicketkeepers, plus the coach's win_rate as an extra data point if a
+    coach is assigned. Bowling rating is the same idea for bowlers/
+    all-rounders, also including the coach's win_rate (an all-rounder, and
+    the coach, both count toward both groups). Overall is the average of
+    the two. If a group ends up empty, it falls back to whichever group
+    does have a value rather than treating the missing one as a zero.
     """
+    squad_players = squad.players.select_related('player', 'player__role', 'player__stats').all()
     rated = [sp.player.stats for sp in squad_players if hasattr(sp.player, 'stats') and sp.player.stats.overall_rating is not None]
-    if not rated:
-        return None
 
     batting_ratings = []
     bowling_ratings = []
@@ -31,16 +31,20 @@ def _team_rating(squad_players):
         if category in ("bowler", "allrounder"):
             bowling_ratings.append(stats.overall_rating)
 
-    batting_rating = sum(batting_ratings) / len(batting_ratings) if batting_ratings else None
-    bowling_rating = sum(bowling_ratings) / len(bowling_ratings) if bowling_ratings else None
+    if squad.coach and squad.coach.win_rate is not None:
+        coach_rating = float(squad.coach.win_rate)
+        batting_ratings.append(coach_rating)
+        bowling_ratings.append(coach_rating)
+
+    batting_rating = round(sum(batting_ratings) / len(batting_ratings)) if batting_ratings else None
+    bowling_rating = round(sum(bowling_ratings) / len(bowling_ratings)) if bowling_ratings else None
 
     if batting_rating is not None and bowling_rating is not None:
-        return round((batting_rating + bowling_rating) / 2)
-    if batting_rating is not None:
-        return round(batting_rating)
-    if bowling_rating is not None:
-        return round(bowling_rating)
-    return None
+        overall = round((batting_rating + bowling_rating) / 2)
+    else:
+        overall = batting_rating if batting_rating is not None else bowling_rating
+
+    return {'batting': batting_rating, 'bowling': bowling_rating, 'overall': overall}
 
 
 @login_required(login_url='users:login')
@@ -81,7 +85,7 @@ def squad_detail_view(request, squad_id):
         'squad': squad,
         'squad_players': squad_players,
         'lineup': lineup,
-        'rating': _team_rating(squad_players),
+        'ratings': _team_ratings(squad),
     })
 
 

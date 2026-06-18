@@ -919,6 +919,17 @@ body {
     margin-bottom: 10px;
 }
 
+.squad-aspect-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.squad-aspect-section-header .squad-aspect-section-title {
+    margin-bottom: 0;
+}
+
 .squad-player-list {
     font-size: 14px;
     color: #333;
