@@ -827,7 +827,7 @@ body {
 }
 
 .squad-detail-page--wide {
-    max-width: 640px;
+    max-width: 1000px;
 }
 
 .squad-detail-header {
@@ -1028,7 +1028,7 @@ body {
 
 .field-diagram {
     width: 100%;
-    max-width: 600px;
+    max-width: 960px;
     display: block;
     margin: 18px auto 12px;
 }

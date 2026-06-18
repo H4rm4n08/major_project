@@ -61,8 +61,8 @@ def _pill_tspans(text):
     """Pre-compute (line, dy) pairs for vertically-centred SVG <tspan> rendering."""
     lines = _wrap_two_lines(text)
     if len(lines) == 1:
-        return [{'text': lines[0], 'dy': 4}]
-    return [{'text': lines[0], 'dy': -4}, {'text': lines[1], 'dy': 12}]
+        return [{'text': lines[0], 'dy': 5}]
+    return [{'text': lines[0], 'dy': -5}, {'text': lines[1], 'dy': 16}]
 
 
 def _team_ratings(squad):
