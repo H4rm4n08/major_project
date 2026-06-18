@@ -15,29 +15,51 @@ BOWLING_SLOT_LABELS = [
 
 COACH_ROLES = {'head': 'Head Coach', 'assistant': 'Assistant Coach'}
 
-# (label, x, y) — coordinates placed by hand on a 400x400 field diagram to
+# (label, x, y) — coordinates placed by hand on a 560x580 field diagram to
 # roughly match a real fielding chart (slips/fine leg near the keeper at the
 # top, long-on/long-off out in front at the bottom). Not claiming exact
 # textbook angles, just a visual spread around the pitch.
 FIELDING_POSITIONS = [
-    ("Fine Leg", 120, 75),
-    ("Short Fine Leg", 180, 55),
-    ("Slip 1", 205, 115),
-    ("Slip 2", 175, 135),
-    ("Gully", 150, 160),
-    ("Point", 120, 195),
-    ("Extra Cover", 80, 170),
-    ("Backward Point", 55, 220),
-    ("Cover", 100, 250),
-    ("Mid-off", 155, 285),
-    ("Mid-on", 245, 285),
-    ("Mid-wicket", 295, 250),
-    ("Square-Leg", 320, 170),
-    ("Deep Backward Square-Leg", 345, 215),
-    ("Deep Mid-wicket", 335, 260),
-    ("Long-on", 265, 330),
-    ("Long-off", 180, 350),
+    ("Fine Leg", 168, 105),
+    ("Short Fine Leg", 252, 77),
+    ("Slip 1", 287, 161),
+    ("Slip 2", 245, 189),
+    ("Gully", 210, 224),
+    ("Point", 168, 273),
+    ("Extra Cover", 112, 238),
+    ("Backward Point", 77, 308),
+    ("Cover", 140, 350),
+    ("Mid-off", 217, 399),
+    ("Mid-on", 343, 399),
+    ("Mid-wicket", 413, 350),
+    ("Square-Leg", 448, 238),
+    ("Deep Backward Square-Leg", 483, 301),
+    ("Deep Mid-wicket", 469, 364),
+    ("Long-on", 371, 462),
+    ("Long-off", 252, 490),
 ]
+
+
+def _wrap_two_lines(text, max_len=13):
+    """Split text into at most 2 lines, breaking at the most balanced word boundary."""
+    if len(text) <= max_len or ' ' not in text:
+        return [text]
+    words = text.split()
+    best_split, best_diff = 1, None
+    for i in range(1, len(words)):
+        line1, line2 = ' '.join(words[:i]), ' '.join(words[i:])
+        diff = abs(len(line1) - len(line2))
+        if best_diff is None or diff < best_diff:
+            best_split, best_diff = i, diff
+    return [' '.join(words[:best_split]), ' '.join(words[best_split:])]
+
+
+def _pill_tspans(text):
+    """Pre-compute (line, dy) pairs for vertically-centred SVG <tspan> rendering."""
+    lines = _wrap_two_lines(text)
+    if len(lines) == 1:
+        return [{'text': lines[0], 'dy': 5}]
+    return [{'text': lines[0], 'dy': -3}, {'text': lines[1], 'dy': 16}]
 
 
 def _team_ratings(squad):
@@ -211,14 +233,16 @@ def squad_fielding_view(request, squad_id):
     squad_players = squad.players.select_related('player', 'player__role', 'player__stats').all()
 
     assigned = {sp.fielding_position: sp for sp in squad_players if sp.fielding_position}
-    lineup = [
-        {
+    lineup = []
+    for i, (label, x, y) in enumerate(FIELDING_POSITIONS):
+        squad_player = assigned.get(label)
+        display_text = squad_player.player.name if squad_player else label
+        lineup.append({
             'slot': i + 1, 'label': label, 'x': x, 'y': y,
-            'pill_x': x - 50, 'pill_y': y - 14,
-            'squad_player': assigned.get(label),
-        }
-        for i, (label, x, y) in enumerate(FIELDING_POSITIONS)
-    ]
+            'rect_x': x - 70, 'rect_y': y - 23,
+            'tspans': _pill_tspans(display_text),
+            'squad_player': squad_player,
+        })
 
     return render(request, 'my_app/squad_fielding.html', {
         'squad': squad,

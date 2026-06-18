@@ -2,27 +2,31 @@
 {% block title %}Fielding Positions – Dream Squad{% endblock %}
 
 {% block content %}
-<div class="squad-detail-page">
+<div class="squad-detail-page squad-detail-page--wide">
 
   <a class="cric-back" href="{% url 'my_app:squad_detail' squad.id %}">&#8592; {{ squad.squad_name }}</a>
 
   <div class="bowling-lineup-banner">Fielding Positions</div>
 
-  <svg class="field-diagram" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="200" cy="205" rx="190" ry="180" fill="#5cab74" stroke="#2e7d52" stroke-width="4" />
-    <ellipse cx="200" cy="205" rx="115" ry="108" fill="none" stroke="#ffffff" stroke-opacity="0.4" stroke-width="2" />
-    <rect x="183" y="130" width="34" height="150" fill="#d8c896" stroke="#bba86f" stroke-width="1" />
-    <line x1="183" y1="150" x2="217" y2="150" stroke="#bba86f" stroke-width="1" />
-    <line x1="183" y1="260" x2="217" y2="260" stroke="#bba86f" stroke-width="1" />
+  <svg class="field-diagram" viewBox="0 0 560 580" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="280" cy="285" rx="270" ry="255" fill="#5cab74" stroke="#2e7d52" stroke-width="5" />
+    <ellipse cx="280" cy="285" rx="160" ry="150" fill="none" stroke="#ffffff" stroke-opacity="0.4" stroke-width="2" />
+    <rect x="256" y="180" width="48" height="210" fill="#d8c896" stroke="#bba86f" stroke-width="1" />
+    <line x1="256" y1="205" x2="304" y2="205" stroke="#bba86f" stroke-width="1" />
+    <line x1="256" y1="365" x2="304" y2="365" stroke="#bba86f" stroke-width="1" />
 
     {% for row in lineup %}
-      <foreignObject x="{{ row.pill_x }}" y="{{ row.pill_y }}" width="100" height="28">
-        <div xmlns="http://www.w3.org/1999/xhtml" class="field-pos-pill{% if row.squad_player %} filled{% endif %}">
-          <a href="{% url 'my_app:squad_fielding_slot' squad.id row.slot %}" title="{{ row.label }}{% if row.squad_player.player.stats.overall_rating %} — OVR {{ row.squad_player.player.stats.overall_rating }}{% endif %}">
-            {% if row.squad_player %}{{ row.squad_player.player.name }}{% else %}{{ row.label }}{% endif %}
-          </a>
-        </div>
-      </foreignObject>
+      <a href="{% url 'my_app:squad_fielding_slot' squad.id row.slot %}">
+        <title>{{ row.label }}{% if row.squad_player.player.stats.overall_rating %} — OVR {{ row.squad_player.player.stats.overall_rating }}{% endif %}</title>
+        <rect x="{{ row.rect_x }}" y="{{ row.rect_y }}" width="140" height="46" rx="10"
+              fill="{% if row.squad_player %}#e8762c{% else %}#dce8fb{% endif %}"
+              stroke="{% if row.squad_player %}#b85a1f{% else %}#aac4ea{% endif %}" stroke-width="1" />
+        <text x="{{ row.x }}" y="{{ row.y }}" text-anchor="middle"
+              font-size="14" font-weight="700"
+              fill="{% if row.squad_player %}#ffffff{% else %}#1a2b6b{% endif %}">
+          {% for ts in row.tspans %}<tspan x="{{ row.x }}" dy="{{ ts.dy }}">{{ ts.text }}</tspan>{% endfor %}
+        </text>
+      </a>
     {% endfor %}
   </svg>
 
