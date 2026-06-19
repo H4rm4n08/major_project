@@ -2,48 +2,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Major Project{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'my_app/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'my_app/styles.css' %}?v={% now 'U' %}">
 </head>
 <body>
-    <header>
-        <table>
-            <tr>
-                <td>
-                    <div class="logo">
-                        <img src="{% static 'my_app/logo.png' %}" alt="my_app Logo">
-                    </div>
-                </td>
-                <td style="width:1000px">
-                    <div class="user-info">
-                        {% if request.user.is_authenticated %}
-                            <span>{{ request.user.username }}</span>
-                            <form action="{% url 'users:logout' %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit">Logout</button>
-                            </form>
-                        
-                        {% else %}
-                            <a href="{% url 'users:register' %}">Register</a>
-                        {% endif %}
-                    </div>
-                </td>
-
-            </tr>
-        </table>
+    {% if request.user.is_authenticated %}
+    <header class="site-header">
+        <div class="site-nav">
+            <span class="site-username">{{ request.user.username }}</span>
+            {% if request.user.is_staff %}
+            <a class="site-admin-link" href="/admin/">Admin</a>
+            {% endif %}
+            <form action="{% url 'users:logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button class="site-logout-btn" type="submit">Logout</button>
+            </form>
+        </div>
     </header>
-    {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
     {% endif %}
-    <main>
-        {% block content %}
-        {% endblock %}
+
+    {% if messages %}
+    <ul class="site-messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <main class="site-main">
+        {% block content %}{% endblock %}
     </main>
-    <footer>
+
+    <footer class="site-footer">
         <p>&copy; 2026 Oakhill College Year 12 Major Project</p>
     </footer>
 </body>

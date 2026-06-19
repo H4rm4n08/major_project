@@ -1,0 +1,48 @@
+{% extends 'my_app/base.html' %}
+{% block title %}Live Scores – Dream Squad{% endblock %}
+
+{% block content %}
+<div class="cric-page">
+  <div class="cric-header">
+    <a class="cric-back" href="{% url 'my_app:home' %}">&#8592; Home</a>
+    <h1 class="cric-title">Live Scores</h1>
+  </div>
+
+  {% if scores %}
+    <div class="cric-list">
+      {% for match in scores %}
+      <div class="cric-card">
+        <div class="cric-card-top">
+          <span class="cric-series">{{ match.series|default:"International" }}</span>
+          {% if match.matchStarted and not match.matchEnded %}
+            <span class="cric-badge live">LIVE</span>
+          {% elif match.matchEnded %}
+            <span class="cric-badge ended">ENDED</span>
+          {% else %}
+            <span class="cric-badge upcoming">UPCOMING</span>
+          {% endif %}
+        </div>
+        <div class="cric-teams">
+          <div class="cric-team">
+            <span class="cric-team-name">{{ match.t1 }}</span>
+            <span class="cric-score">{{ match.t1s|default:"–" }}</span>
+          </div>
+          <span class="cric-vs">vs</span>
+          <div class="cric-team">
+            <span class="cric-team-name">{{ match.t2 }}</span>
+            <span class="cric-score">{{ match.t2s|default:"–" }}</span>
+          </div>
+        </div>
+        {% if match.status %}
+        <p class="cric-status">{{ match.status }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="cric-empty">
+      <p>No live matches at the moment. Check back soon!</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

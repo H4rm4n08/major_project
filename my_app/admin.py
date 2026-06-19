@@ -32,8 +32,8 @@ class PlayerRoleAdmin(admin.ModelAdmin):
 
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ["name", "role", "country", "get_runs", "get_wickets"]
-    list_filter = ["role", "country"]
+    list_display = ["name", "role", "country", "bowling_pace", "bowling_spin_type", "get_runs", "get_wickets"]
+    list_filter = ["role", "country", "bowling_pace", "bowling_spin_type"]
     search_fields = ["name", "country"]
     inlines = [PlayerStatsInline]
 
@@ -87,3 +87,32 @@ class SquadPlayerAdmin(admin.ModelAdmin):
     list_filter = ["is_captain", "is_wicketkeeper", "is_substitute", "squad"]
     search_fields = ["squad__squad_name", "player__name"]
     autocomplete_fields = ["squad", "player"]
+
+from .models import LiveScoreCache, FixtureCache, PlayerStatsCache
+
+
+@admin.register(LiveScoreCache)
+class LiveScoreCacheAdmin(admin.ModelAdmin):
+    list_display = ["match_id", "fetched_at"]
+    readonly_fields = ["match_id", "data", "fetched_at"]
+
+
+@admin.register(FixtureCache)
+class FixtureCacheAdmin(admin.ModelAdmin):
+    list_display = ["match_id", "fetched_at"]
+    readonly_fields = ["match_id", "data", "fetched_at"]
+
+
+@admin.register(PlayerStatsCache)
+class PlayerStatsCacheAdmin(admin.ModelAdmin):
+    list_display = ["player_id", "fetched_at"]
+    readonly_fields = ["player_id", "data", "fetched_at"]
+
+
+from .models import PlayerSyncState
+
+
+@admin.register(PlayerSyncState)
+class PlayerSyncStateAdmin(admin.ModelAdmin):
+    list_display = ["last_offset", "updated_at"]
+    readonly_fields = ["last_offset", "updated_at"]

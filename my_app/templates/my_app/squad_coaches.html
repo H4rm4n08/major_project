@@ -1,0 +1,29 @@
+{% extends 'my_app/base.html' %}
+{% block title %}Coaches – Dream Squad{% endblock %}
+
+{% block content %}
+<div class="squad-detail-page">
+
+  <a class="cric-back" href="{% url 'my_app:squad_detail' squad.id %}">&#8592; {{ squad.squad_name }}</a>
+
+  <div class="bowling-lineup-banner">Coaches</div>
+
+  <div class="squad-aspect-list">
+    {% for row in coaches %}
+      {% if row.coach %}
+        <a class="squad-aspect-btn bowling-slot-filled" href="{% url 'my_app:squad_coach_slot' squad.id row.role %}">
+          <span class="bowling-slot-player">
+            {{ row.coach.name }}
+            <span class="player-rating-badge">{{ row.coach.win_rate }}% win rate</span>
+          </span>
+        </a>
+      {% else %}
+        <a class="squad-aspect-btn" href="{% url 'my_app:squad_coach_slot' squad.id row.role %}">+ Search &amp; add {{ row.label }}</a>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="squad-illustration">&#127951;</div>
+
+</div>
+{% endblock %}

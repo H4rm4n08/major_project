@@ -1,0 +1,41 @@
+{% extends 'my_app/base.html' %}
+{% block title %}Batting Lineup – Dream Squad{% endblock %}
+
+{% block content %}
+<div class="squad-detail-page">
+
+  <a class="cric-back" href="{% url 'my_app:squad_detail' squad.id %}">&#8592; {{ squad.squad_name }}</a>
+
+  <div class="bowling-lineup-banner">Batting lineup</div>
+
+  <div class="squad-rating-banner">
+    OVERALL BATTING RATING
+    <span class="squad-rating-value">{% if ratings.batting is not None %}{{ ratings.batting }}{% else %}N/A{% endif %}</span>
+  </div>
+
+  <ol class="squad-slot-list">
+    {% for row in lineup %}
+      <li class="squad-slot-row">
+        <span class="squad-slot-number">{% if row.label %}12{% else %}{{ row.slot }}{% endif %}</span>
+        {% if row.label %}<span class="squad-slot-label-text">{{ row.label }}</span>{% endif %}
+        {% if row.squad_player %}
+          <a class="squad-slot-player" href="{% url 'my_app:player_stats' row.squad_player.player.cricapi_id %}">
+            {{ row.squad_player.player.name }}{% if row.squad_player.is_captain %} (C){% endif %}{% if row.squad_player.is_wicketkeeper %} (WK){% endif %}
+          </a>
+          {% if row.squad_player.player.stats.overall_rating %}<span class="player-rating-badge">{{ row.squad_player.player.stats.overall_rating }}</span>{% endif %}
+          <form method="post" action="{% url 'my_app:squad_slot' squad.id row.slot %}" class="squad-slot-remove-form">
+            {% csrf_token %}
+            <input type="hidden" name="remove" value="1">
+            <button class="squad-slot-remove-btn" type="submit" title="Remove from this slot" aria-label="Remove from this slot">&times;</button>
+          </form>
+        {% else %}
+          <a class="squad-slot-empty" href="{% url 'my_app:squad_slot' squad.id row.slot %}">+ Search &amp; add player</a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+
+  <div class="squad-illustration">&#127951;</div>
+
+</div>
+{% endblock %}

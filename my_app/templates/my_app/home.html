@@ -1,27 +1,135 @@
+{% extends 'my_app/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Squad</title>
-    <link rel="stylesheet" href="{% static 'my_app/styles.css' %}">
-</head>
-<body>
-    <div class="phone-container">
-        <h1 class="header-title">Welcome, {{ request.user.first_name }}!</h1>
+{% block title %}Home – Dream Squad{% endblock %}
 
-        <div class="logo-container">
-            <img src="{% static 'my_app/logo.png' %}" alt="Cricket Logo" class="app-logo">
-        </div>
+{% block content %}
+<div class="dash-page">
+  <div class="dash-bg-decor" aria-hidden="true"></div>
 
-        <p>You're logged in. Ready to build your dream squad?</p>
+  <div class="dash-welcome">
+    <span class="dash-ball" aria-hidden="true"></span>
+    <img src="{% static 'my_app/logo.png' %}" alt="Logo" class="dash-logo">
+    <h1 class="dash-title">Welcome, {{ request.user.first_name|default:request.user.username }}!</h1>
+    <p class="dash-subtitle">Your cricket hub — live scores, fixtures and player stats.</p>
+  </div>
 
-        <a href="/users/logout">
-            <button class="submit-btn">Logout</button>
-        </a>
+  <!-- Quick nav cards -->
+  <div class="dash-grid">
+    <a class="dash-card" href="{% url 'my_app:live_scores' %}">
+      <span class="dash-card-icon">🏏</span>
+      <span class="dash-card-label">Live Scores</span>
+      <span class="dash-card-desc">Matches happening right now</span>
+    </a>
+    <a class="dash-card" href="{% url 'my_app:fixtures' %}">
+      <span class="dash-card-icon">📅</span>
+      <span class="dash-card-label">Fixtures</span>
+      <span class="dash-card-desc">Upcoming matches &amp; schedules</span>
+    </a>
+    <a class="dash-card" href="{% url 'my_app:player_search' %}">
+      <span class="dash-card-icon">🔍</span>
+      <span class="dash-card-label">Player Stats</span>
+      <span class="dash-card-desc">Search and explore player data</span>
+    </a>
+  </div>
 
-        <div class="home-bar"></div>
+  <!-- My Squads from DB -->
+  <div class="dash-section">
+    <div class="dash-section-header">
+      <h2 class="dash-section-title">My Squads</h2>
+      <a class="dash-section-link" href="{% url 'my_app:squad_create' %}">+ Create Squad</a>
     </div>
-</body>
-</html>
+    {% if squads %}
+      <div class="dash-squad-list">
+        {% for squad in squads %}
+        <div class="dash-squad-card">
+          <a class="dash-squad-card-link" href="{% url 'my_app:squad_detail' squad.id %}">
+            <div class="dash-squad-name">{{ squad.squad_name }}</div>
+            <div class="dash-squad-meta">
+              {% if squad.coach %}Coach: {{ squad.coach.name }} &nbsp;·&nbsp; {% endif %}
+              {{ squad.players.count }} player{{ squad.players.count|pluralize }}
+            </div>
+          </a>
+          <form method="post" action="{% url 'my_app:squad_delete' squad.id %}"
+                onsubmit="return confirm('Delete {{ squad.squad_name }}? This cannot be undone.');">
+            {% csrf_token %}
+            <button class="dash-squad-delete-btn" type="submit" title="Delete squad" aria-label="Delete squad">&times;</button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="dash-empty">You haven't built any squads yet.</p>
+    {% endif %}
+  </div>
+
+  <!-- Live scores snapshot from DB cache -->
+  <div class="dash-section">
+    <div class="dash-section-header">
+      <h2 class="dash-section-title">Live Now</h2>
+      <a class="dash-section-link" href="{% url 'my_app:live_scores' %}">See all →</a>
+    </div>
+    {% if live_scores %}
+      <div class="cric-list">
+        {% for match in live_scores %}
+        <div class="cric-card">
+          <div class="cric-card-top">
+            <span class="cric-series">{{ match.series|default:"International" }}</span>
+            <span class="cric-badge live">LIVE</span>
+          </div>
+          <div class="cric-teams">
+            <div class="cric-team">
+              <span class="cric-team-name">{{ match.t1 }}</span>
+              <span class="cric-score">{{ match.t1s|default:"–" }}</span>
+            </div>
+            <span class="cric-vs">vs</span>
+            <div class="cric-team">
+              <span class="cric-team-name">{{ match.t2 }}</span>
+              <span class="cric-score">{{ match.t2s|default:"–" }}</span>
+            </div>
+          </div>
+          {% if match.status %}<p class="cric-status">{{ match.status }}</p>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="dash-empty">No live matches right now.</p>
+    {% endif %}
+  </div>
+
+  <!-- Upcoming fixtures snapshot from DB cache -->
+  <div class="dash-section">
+    <div class="dash-section-header">
+      <h2 class="dash-section-title">Upcoming Fixtures</h2>
+      <a class="dash-section-link" href="{% url 'my_app:fixtures' %}">See all →</a>
+    </div>
+    {% if fixtures %}
+      <div class="cric-list">
+        {% for match in fixtures %}
+        <div class="cric-card">
+          <div class="cric-card-top">
+            <span class="cric-series">{{ match.series|default:"International" }}</span>
+            <span class="cric-match-type">{{ match.matchType|upper|default:"MATCH" }}</span>
+          </div>
+          <div class="cric-teams">
+            <div class="cric-team">
+              <span class="cric-team-name">{{ match.teams.0|default:"TBD" }}</span>
+            </div>
+            <span class="cric-vs">vs</span>
+            <div class="cric-team">
+              <span class="cric-team-name">{{ match.teams.1|default:"TBD" }}</span>
+            </div>
+          </div>
+          <div class="cric-meta">
+            {% if match.date %}<span>📅 {{ match.date }}</span>{% endif %}
+            {% if match.venue %}<span>📍 {{ match.venue }}</span>{% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="dash-empty">No upcoming fixtures available.</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

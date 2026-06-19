@@ -1,0 +1,56 @@
+{% extends 'my_app/base.html' %}
+{% block title %}{{ player.name|default:"Player" }} – Dream Squad{% endblock %}
+
+{% block content %}
+<div class="cric-page">
+  <div class="cric-header">
+    <a class="cric-back" href="{% url 'my_app:player_search' %}">&#8592; Players</a>
+    <h1 class="cric-title">{{ player.name|default:"Player Profile" }}</h1>
+  </div>
+
+  {% if player %}
+  <div class="cric-card player-profile">
+    <div class="player-profile-top">
+      <div class="player-profile-avatar">{{ player.name|slice:":1" }}</div>
+      <div class="player-profile-meta">
+        <h2 class="player-profile-name">{{ player.name }}</h2>
+        {% if player.country %}<p class="player-profile-country">{{ player.country }}</p>{% endif %}
+        {% if player.role %}<span class="cric-badge upcoming">{{ player.role }}</span>{% endif %}
+      </div>
+      {% if stats.overall_rating %}
+      <div class="player-rating-circle">
+        <span class="player-rating-circle-value">{{ stats.overall_rating }}</span>
+        <span class="player-rating-circle-label">OVR</span>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if stats %}
+    <div class="stats-sections">
+      <div class="stats-section">
+        <h3 class="stats-section-title">Batting (ODI)</h3>
+        <table class="stats-table">
+          <tr><td>Runs</td><td>{{ stats.runs_scored }}</td></tr>
+          {% if stats.batting_avg is not None %}<tr><td>Average</td><td>{{ stats.batting_avg }}</td></tr>{% endif %}
+          {% if stats.strike_rate_bat is not None %}<tr><td>Strike Rate</td><td>{{ stats.strike_rate_bat }}</td></tr>{% endif %}
+        </table>
+      </div>
+      <div class="stats-section">
+        <h3 class="stats-section-title">Bowling (ODI)</h3>
+        <table class="stats-table">
+          {% if player.bowling_style_display %}<tr><td>Style</td><td>{{ player.bowling_style_display }}</td></tr>{% endif %}
+          <tr><td>Wickets</td><td>{{ stats.wickets_taken }}</td></tr>
+          {% if stats.bowling_economy is not None %}<tr><td>Economy</td><td>{{ stats.bowling_economy }}</td></tr>{% endif %}
+        </table>
+      </div>
+    </div>
+    {% else %}
+      <p class="cric-status">No detailed stats available for this player.</p>
+    {% endif %}
+  </div>
+
+  {% else %}
+    <div class="cric-empty"><p>Player not found.</p></div>
+  {% endif %}
+</div>
+{% endblock %}

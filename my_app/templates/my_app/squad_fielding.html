@@ -1,0 +1,36 @@
+{% extends 'my_app/base.html' %}
+{% block title %}Fielding Positions – Dream Squad{% endblock %}
+
+{% block content %}
+<div class="squad-detail-page squad-detail-page--wide">
+
+  <a class="cric-back" href="{% url 'my_app:squad_detail' squad.id %}">&#8592; {{ squad.squad_name }}</a>
+
+  <div class="bowling-lineup-banner">Fielding Positions</div>
+
+  <svg class="field-diagram" viewBox="0 0 640 680" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="320" cy="340" rx="312" ry="325" fill="#5cab74" stroke="#2e7d52" stroke-width="5" />
+    <ellipse cx="320" cy="340" rx="195" ry="203" fill="none" stroke="#ffffff" stroke-opacity="0.4" stroke-width="2" />
+    <rect x="292" y="235" width="56" height="210" fill="#d8c896" stroke="#bba86f" stroke-width="1" />
+    <line x1="292" y1="260" x2="348" y2="260" stroke="#bba86f" stroke-width="1" />
+    <line x1="292" y1="420" x2="348" y2="420" stroke="#bba86f" stroke-width="1" />
+
+    {% for row in lineup %}
+      <a href="{% url 'my_app:squad_fielding_slot' squad.id row.slot %}">
+        <title>{{ row.label }}{% if row.squad_player.player.stats.overall_rating %} — OVR {{ row.squad_player.player.stats.overall_rating }}{% endif %}</title>
+        <rect x="{{ row.rect_x }}" y="{{ row.rect_y }}" width="92" height="32" rx="8"
+              fill="{% if row.squad_player %}#e8762c{% else %}#8fd6a3{% endif %}"
+              stroke="{% if row.squad_player %}#b85a1f{% else %}#4a9a63{% endif %}" stroke-width="1" />
+        <text x="{{ row.x }}" y="{{ row.y }}" text-anchor="middle"
+              font-size="13" font-weight="700"
+              fill="{% if row.squad_player %}#ffffff{% else %}#1f5c38{% endif %}">
+          {% for ts in row.tspans %}<tspan x="{{ row.x }}" dy="{{ ts.dy }}">{{ ts.text }}</tspan>{% endfor %}
+        </text>
+      </a>
+    {% endfor %}
+  </svg>
+
+  <p class="field-diagram-hint">Tap a position to search the squad and assign a player to it.</p>
+
+</div>
+{% endblock %}
