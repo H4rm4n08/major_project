@@ -1027,6 +1027,7 @@ body {
     font-weight: 700;
     color: #e8762c;
     line-height: 1.2;
+    animation: page-fade-in 0.4s ease both;
 }
 
 .squad-detail-subtitle {
@@ -1040,6 +1041,11 @@ body {
     color: #555;
 }
 
+@keyframes banner-pop-in {
+    0% { transform: scale(0.92); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
 .squad-rating-banner {
     background: #e8762c;
     color: #fff;
@@ -1050,12 +1056,21 @@ body {
     border-radius: 10px;
     padding: 14px;
     margin-bottom: 22px;
+    box-shadow: 0 4px 14px rgba(232, 118, 44, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: banner-pop-in 0.35s ease both;
+}
+
+.squad-rating-banner:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(232, 118, 44, 0.32);
 }
 
 .squad-rating-value {
     display: block;
     font-size: 22px;
     margin-top: 4px;
+    animation: banner-pop-in 0.5s ease 0.1s both;
 }
 
 .squad-aspects-title {
@@ -1097,6 +1112,8 @@ body {
     border-radius: 10px;
     padding: 16px;
     margin: 18px 0 22px;
+    box-shadow: 0 4px 14px rgba(232, 118, 44, 0.25);
+    animation: banner-pop-in 0.35s ease both;
 }
 
 .bowling-slot-filled {
@@ -1183,8 +1200,15 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 10px 0;
+    padding: 10px 12px;
+    margin: 0 -12px;
+    border-radius: 8px;
     border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.15s ease;
+}
+
+.squad-slot-row:hover {
+    background-color: #f7f9fc;
 }
 
 .squad-slot-number {
@@ -1199,6 +1223,11 @@ body {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    transition: transform 0.15s ease;
+}
+
+.squad-slot-row:hover .squad-slot-number {
+    transform: scale(1.12);
 }
 
 .squad-slot-label-text {
@@ -1252,10 +1281,17 @@ body {
     text-decoration: underline;
 }
 
+@keyframes illustration-sway {
+    0%, 100% { transform: rotate(-4deg); }
+    50% { transform: rotate(4deg); }
+}
+
 .squad-illustration {
     text-align: center;
     font-size: 40px;
     margin-top: 30px;
+    animation: illustration-sway 3.2s ease-in-out infinite;
+    transform-origin: bottom center;
 }
 
 .squad-delete-btn {
@@ -1313,6 +1349,13 @@ body {
 
 .field-diagram a {
     cursor: pointer;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.15s ease;
+}
+
+.field-diagram a:hover {
+    transform: scale(1.08);
 }
 
 .field-diagram-hint {
